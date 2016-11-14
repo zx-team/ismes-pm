@@ -1364,9 +1364,9 @@ public class ScgcActivity {
 		String gxzid = parameters.getString("gxzid");
 		
 		Dataset dataset = Sys.query(TableConstant.工序质检项录入, "gxzjxlrid,zjxh,ljid,gxzid,zjbzlx,jyxm,gyyq,yxsx,yxxx,swjsfj,xjsfj,hxsfj,zjsfj,zjysfj",
-				" ljid = ? and gxzid = ? ", "zjxh asc", new Object[]{ljid,gxzid});
+				" ljid = ? and gxzid = ? ", null, new Object[]{ljid,gxzid});
 		List<Map<String,Object>> list = dataset.getList();
-		
+		int i=1;
 		for(Map map : list){
 			if (null==map.get("swjsfj") || "".equals(map.get("swjsfj").toString())){
 				map.put("swjsfj", "00");
@@ -1383,6 +1383,7 @@ public class ScgcActivity {
 			if (null==map.get("zjysfj") || "".equals(map.get("zjysfj").toString())){
 				map.put("zjysfj", "00");
 			}
+			map.put("index", i++);
 		}
 		bundle.put("rows", list);
 		bundle.put("totalPage", 100);

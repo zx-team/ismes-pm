@@ -39,11 +39,12 @@
 			<normal-actions>
 				<button name="addZjbzBtn" label="添加"  type="button" icon="icon-Add_to" onClick="addZjbz"></button>
 			</normal-actions>
-			<table name="table-zjbz" scroll="false"  onDblClickRow = "double_select_func"
+			<table name="table-zjbz" scroll="false"  showrownum = "true" onDblClickRow = "double_select_func"
 				 minheight="150" multiselect="false" pagesize = "200"
 				 layoutconstraint="md:12;sm:12;" showpager="false">
 				<attribute name="url"><![CDATA[gxzjxlrTable?ljid=${ljid}&gxzid=${gxzid}]]></attribute>
-				<column label="质检序号" name="zjxh" editable="true" 
+				<column label="质检序号" name="index" ></column>
+				<column label="质检编号" name="zjxh" editable="true" 
 						type="text" editrules="{required:true,maxlength:50}"></column>
 				<column label="质检标准类型" name="zjbzlx" editable="true" 
 						  edittype="search" editrules="{required:true}">
