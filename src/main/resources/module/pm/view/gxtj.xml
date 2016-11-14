@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="gxtj" title="工序添加" onReady="viewReady">
+	<hidden name="gxid" bind="gxid"></hidden>
+	<hidden name="gyid" bind="gyid"></hidden>
+	<hidden name="zlbj" bind="zlbj"></hidden>
+	<hidden name="gyzdwjid_fjid" bind="gyzdwj.wjid"></hidden>
+	<hidden name="gxtz_fjid" bind="gxtz.wjid"></hidden>
+	<hidden name="gyzdwj_url" bind="gyzdwj_url"></hidden>
+	<hidden name="gxtz_url" bind="gxtz_url"></hidden>
+	<hidden name="ljtp_url" bind="partsInfo.url"></hidden>
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<bunch layoutconstraint="md:2">
+				<image shape="thumbnail" name="image_lj" popshow="true" src="" layoutconstraint="md:4"  />
+			</bunch>
+		
+			<bunch layoutconstraint="md:10">
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljmc" text="零件名称 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljmc" align = "center" layoutconstraint="md:12"  />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljbh" text="零件图号 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_mpdh" text="零件简码 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.mpdh" align = "center" layoutconstraint="md:12"  />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_tzbb" text="图纸版本 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.tzbb" align = "center"  layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="毛坯规格 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.clbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="加工状态 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.jgzt_str" align = "center" layoutconstraint="md:12" />
+				</bunch>
+			</bunch>
+		
+		</panel-body>
+	</panel>
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<tabs name="tabs-gxtj" onShow="tab_show_func">
+				<tab-nav position="top" tabdrop="true">
+					<tab name="tab-basicinfo" label="基本信息" active="true" />
+					<tab name="tab-sblx" label="设备类型" />
+					<tab name="tab-wl" label="物料" />
+					<tab name="tab-jj" label="夹具" />
+					<tab name="tab-lj" label="量具" />
+				</tab-nav>
+				<tab-content name="tab-basicinfo">
+					<form name="form-gxtj-basicinfo" horizontal="true"
+						action="/gx/saveBasicGxxx" method="post">
+						<form-body>
+							<bunch layoutconstraint="md:12;">
+								<hidden name="basicinfo-gxid" bind="gxid" />
+								<hidden name="hidden-ljmc" bind="partsInfo.ljmc" />
+								<hidden name="hidden-ljid" bind="partsInfo.ljid" />
+								<hidden name="hidden-ljbh" bind="partsInfo.ljbh" />
+								<!-- 20161105 add by maww 零件加工状态 -->
+								<hidden name="hidden-ljjgzt" bind="partsInfo.jgzt" />
+								<form-group>
+									<form-group>
+										<label for="basicinfo-gxmc" text="工序名称"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-gxmc" placeholder="请输入工序名称" bind="gxxx.gxmc"
+											readonly="true" layoutconstraint="md:3;" />
+
+										<label for="basicinfo-gxxh" text="工序序号"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-gxxh" placeholder="请输入工序序号" bind="gxxx.gxxh"
+											readonly="true" layoutconstraint="md:3;" />
+
+										<label for="basicinfo-gxbh" text="工序编号"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-gxbh" placeholder="请输入工序编号" bind="gxxx.gxbh"
+											readonly="true" layoutconstraint="md:3;" />
+									</form-group>
+									<form-group>
+										<label for="basicinfo-gxlx" text="工序类型"
+											layoutconstraint="md:1" />
+										<select name="basicinfo-gxlx" placeholder="请选择工序类型"
+											dictionary="gxlx" bind="gxxx.gxlxdm" multiple="false"
+											layoutconstraint="md:3" />
+
+										<label for="basicinfo-zjfs" text="装卡方式"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-zjfs" placeholder="请输入" bind="gxxx.zjfs"
+											readonly="false" layoutconstraint="md:3;" />
+
+										<label for="basicinfo-bj" text="质量必检" layoutconstraint="md:1" />
+										<select name="basicinfo-bj" placeholder="质量是否必检" bind="gxxx.zlbj"
+											multiple="false" layoutconstraint="md:3">
+											<option value="10" label="必检" />
+											<option value="0" label="非必检" selected="true" />
+										</select>
+									</form-group>
+									<!-- <form-group>
+										<label for="basicinfo-cxmc" text="程序名称"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-cxmc" placeholder="请输入程序名称" bind="gxxx.cxmc"
+											readonly="false" layoutconstraint="md:3;" />
+									</form-group> -->
+
+								</form-group> 
+								<form-group>
+									<label for="basicinfo-gxtzid" text="工序图纸"
+										layoutconstraint="md:1" />
+									<form-group>
+										<!-- <button name="gxtzid-download" icon="download" label="工序图纸" 
+											type="button" context="default" layoutconstraint="md:3;" onClick="gxtz_download_func"/> -->
+
+										<file name="basicinfo-gxtzid" placeholder="请上传工序图纸"
+											layoutconstraint="md:4;md-offset:0;" />
+										<image shape="thumbnail" name="image_gxtz" popshow="true"
+											src="" layoutconstraint="md:6" />
+									</form-group>
+								</form-group>
+								<form-group>
+									<form-group>
+										<label for="basicinfo-fjsm" text="附件说明"
+											layoutconstraint="md:1" />
+										<text name="basicinfo-fjsm" placeholder="请输入" bind="gxxx.fjsm"
+											readonly="false" layoutconstraint="md:11;" />
+									</form-group>
+								</form-group>
+								<form-group>
+									<label for="basicinfo-gyzdwj" text="工艺指导文件"
+										layoutconstraint="md:1" />
+									<form-group>
+
+										<file name="basicinfo-gyzdwj" placeholder="请上传工艺指导文件"
+											layoutconstraint="md:4;" />
+										<!-- <image shape="thumbnail" name="image_gyzdwj" popshow="true" 
+											src="" layoutconstraint="md:6" /> -->
+										<button name="gyzdwjid-download" icon="download" label="工艺指导文件下载"
+											type="button" context="default" layoutconstraint="md:3;"
+											onClick="gyzdwjid_download_func" />
+									</form-group>
+								</form-group>
+							</bunch>
+						</form-body>
+					</form>
+
+					<normal-actions>
+						<button name="add-gbxx" label="添加" type="button" icon="icon-Add_to"
+							onClick="add_gbxx_func" />
+					</normal-actions>					
+					<table name="table-gxtj-gbxx" showrownum="false" scroll="false"
+						editurl="" multiselect="false" url="gbxxTable?gxid=${gxid}"
+						layoutconstraint="md:12" showpager="false" caption="工步信息"
+						pagesize="200" 
+						onDblClickRow = "gbxx_double_select_func">
+						<column label="工步序号" name="gbxh" hidden="false" />
+						<column label="工步id" name="gbid" key="true" hidden="true" />
+						<column label="刀位" name="dw" sortable="true" editable="true" edittype="select">
+							<attribute name="editoptions"><![CDATA[
+								{
+									value:{'T1':'T1','T2':'T2','T3':'T3','T4':'T4',
+											'T5':'T5','T6':'T6','T7':'T7','T8':'T8',
+											'T9':'T9','T10':'T10','T11':'T11','T12':'T12',}
+								}
+							]]></attribute>
+						</column>
+						
+						<column label="图纸编号" name="djtzbh" type="text" editable="false"  hidden="true" />
+						<column label="刀体id" name="djid" editable="true" hidden="true" />
+						<column label="刀体编号" name="djbh" type="text" editable="true" editrules="{required:true}"
+							edittype="search">
+							<attribute name="editoptions"><![CDATA[
+							{
+										displaykey:"label",
+										searchkey:"label value",
+										valuekey:"value",
+										url:"wlEdit?query_wllbdm_ids='10'",
+										onSelected : function(data){
+											var rows = ui.table("table-gxtj-gbxx").getSelectedRows();
+							             	//ui.table("table-gxtj-gbxx").setCell(rows[0],"djid",data.wlid);
+							             	$('#'+rows[0]+"_djid").val(data.wlid);
+										 }
+									}
+						]]></attribute>
+							 <attribute name="formatoptions"><![CDATA[
+							{transform : "djbh"}
+						]]></attribute> 
+						</column>
+						
+						<column label="刀体id" name="dpxhid" editable="true" hidden="true" />
+						<column label="刀片型号" name="dpxhbh" type="text" editable="true" editrules="{required:true}"
+							edittype="search">
+							<attribute name="editoptions"><![CDATA[
+							{
+										displaykey:"label",
+										searchkey:"label",
+										valuekey:"value",
+										url:"wlEdit?query_wllbdm_ids='60'",
+										onSelected : function(data){
+											var rows = ui.table("table-gxtj-gbxx").getSelectedRows();
+											$('#'+rows[0]+"_dpxhid").val(data.wlid);
+							             	ui.table("table-gxtj-gbxx").setCell(rows[0],"wltm",data.wltm);
+										 }
+									}
+						]]></attribute>
+							<attribute name="formatoptions"><![CDATA[
+							{transform : "dpxhbh"}
+						]]></attribute>
+						</column>
+						
+						<column label="刀具寿命" name="djsm" type="text" editable="true" />
+						<column label="刀片类型条码" name="wltm" type="text" editable="false" />
+
+						<column label="加工过程描述" name="jggcms" type="text" width="200"
+							editable="true" />
+						<column label="最大切削直径mm" name="qxzj_max" type="number"
+							editrules="{number:true}" editable="true" width="150"/>
+						<column label="最小切削直径mm" name="qxzj_min" type="number"
+							editrules="{number:true}" editable="true" width="150"/>
+						<column label="切削速度" name="qxsud" type="number" editrules="{number:true}"
+							editable="true" />
+						<column label="主轴转速" name="zzzs" type="number" editrules="{number:true}"
+							editable="true" />
+						<column label="切削深度" name="qxshend" type="number"
+							editrules="{number:true}" editable="true" />
+						<column label="进给量" name="jgl" type="number" editrules="{number:true}"
+							editable="true" />
+						<column label="操作" name="table_action" type="operation"
+							editable="false">
+							<attribute name="formatoptions"><![CDATA[
+							[
+								{
+									name:"talbe_basic_update",
+									icon:"icon-edit",
+									label:"编辑",
+									click:handle_table_basic_update
+								} 
+								,
+								{
+									name:"talbe_basic_del",
+									icon:"icon-delete",
+									label:"删除",
+									click:handle_table_basic_delete
+								} 
+							]
+						]]></attribute>
+						</column>
+					</table>
+				</tab-content>
+
+				<tab-content name="tab-sblx">
+					<normal-actions>
+						<button name="add-sblx" label="添加" type="button" icon="icon-Add_to"
+							onClick="add_sblx_func" />
+					</normal-actions>
+					<table name="table-gxtj-sblx" showrownum="true" scroll="false"
+						editurl="" multiselect="false" url="sblxTable?gxid=${gxid}"
+						layoutconstraint="md:12" showpager="false" caption="设备类型信息"
+						pagesize="200" onDblClickRow = "sblx_double_select_func">
+						<column label="关联id" name="glid" key="true" hidden="true" />
+						<column label="工序id" name="gxid" editable="true" hidden="true" />
+						<column label="设备类型id" name="sblxid" editable="true" hidden="true" />
+						<column label="设备类型编号" name="sblxbh" type="text" editable="true" editrules="{required:true}"
+							edittype="search">
+							<attribute name="editoptions"><![CDATA[
+							{
+										displaykey:"label",
+										searchkey:"label value",
+										valuekey:"value",
+										url:"sblxEdit",
+										onSelected : function(data){
+											var rows = ui.table("table-gxtj-sblx").getSelectedRows();
+							             	$('#'+rows[0]+"_sblxid").val(data.sblxid);
+							             	ui.table("table-gxtj-sblx").setCell(rows[0],"sblxmc",data.sblxmc);
+							             	ui.table("table-gxtj-sblx").setCell(rows[0],"sbfldm",data.sbfldm);
+										 }
+									}
+						]]></attribute>
+							 <attribute name="formatoptions"><![CDATA[
+							{transform : "sblxbh"}
+						]]></attribute> 
+						</column>
+
+						<column label="设备类型名称" name="sblxmc" editable="false" width="250" />
+						<column label="设备类型分类" name="sbfldm" editable="false" width="250" 
+							type="dict" dictionary="SBFL" />
+						<column label="操作" name="table_action" type="operation">
+							<attribute name="formatoptions"><![CDATA[
+								[
+									{
+										name:"talbe_sblx_update",
+										icon:"icon-edit",
+										label:"编辑",
+										click:handle_table_sblx_update
+									},
+									{
+										name:"talbe_sblx_del",
+										icon:"icon-delete",
+										label:"删除",
+										click:handle_table_sblx_delete
+									}
+								]
+							]]></attribute>
+						</column>
+					</table>
+
+				</tab-content>
+
+				<tab-content name="tab-wl">
+					<normal-actions>
+						<button name="add-wl" label="添加" type="button" icon="icon-Add_to"
+							onClick="add_wl_func" />
+					</normal-actions>
+					<table name="table-gxtj-wl" showrownum="true" scroll="false"
+						editurl="" multiselect="false" url="" layoutconstraint="md:12"
+						showpager="false" caption="物料信息" pagesize="200"
+						onDblClickRow = "wl_double_select_func">
+						<attribute name="url"><![CDATA[wlTable?gxid=${gxid}&wlqfdm=30]]></attribute>
+						<column label="关联id" name="glid" key="true" hidden="true" />
+						<column label="物料id" name="wlid" editable="true" hidden="true"/>
+						<column label="物料编号" name="wlbh" editable="true" editrules="{required:true}"
+							 type="text" edittype="search">
+								<attribute name="editoptions"><![CDATA[
+									{
+										displaykey:"label",
+										searchkey:"label",
+										valuekey:"value",
+										url:"wlEdit?query_wllbdm_ids='40','50','70'",
+										onSelected : function(data){
+											var rows = ui.table("table-gxtj-wl").getSelectedRows();
+											$('#'+rows[0]+"_wlid").val(data.wlid);
+							             	ui.table("table-gxtj-wl").setCell(rows[0],"wlmc",data.wlmc);
+							             	ui.table("table-gxtj-wl").setCell(rows[0],"wllbdm",data.wllbdm);
+							             	ui.table("table-gxtj-wl").setCell(rows[0],"wlgg",data.wlgg);
+							             	ui.table("table-gxtj-wl").setCell(rows[0],"wldwdm",data.wldwdm);
+										 }
+									}
+								]]></attribute>
+								<attribute name="formatoptions"><![CDATA[
+									{transform : "wlbh"}
+								]]></attribute>
+						</column>
+						<column label="关联表里的类别代码" name="wlqfdm" editable="true"
+							hidden="true" />
+						<column label="名称" name="wlmc" editable="false" /><!-- width="200" -->
+						<column label="类别" name="wllbdm" type="dict" dictionary="WLLB"
+							editable="false" /> <!-- width="150" -->
+						<column label="规格" name="wlgg" editable="false" /><!-- width="100" -->
+						<column label="单位" name="wldwdm" type="dict" dictionary="jldw"
+							editable="false" />
+						<column label="数量" name="wlsl" editable="true"
+							editrules="{required:true,number:true}" /><!-- TODO -->
+						<column label="操作" name="table_action" type="operation">
+							<attribute name="formatoptions"><![CDATA[
+								[
+									{
+										name:"talbe_wl_edit",
+										icon:"icon-edit",
+										label:"编辑",
+										click:handle_table_wl_edit
+									},
+									{
+										name:"talbe_wl_del",
+										icon:"icon-delete",
+										label:"删除",
+										click:handle_table_wl_delete
+									}
+								]
+							]]></attribute>
+						</column>
+					</table>
+				</tab-content>
+
+				<tab-content name="tab-jj">
+					<normal-actions>
+						<button name="add-jj" label="添加" type="button" icon="icon-Add_to"
+							onClick="add_jj_func" />
+					</normal-actions>
+					<table name="table-gxtj-jj" showrownum="true" scroll="false"
+						editurl="" multiselect="false" url="wlTable?gxid=${gxid}"
+						layoutconstraint="md:12" showpager="false" caption="夹具信息"
+						pagesize="200" onDblClickRow = "jj_double_select_func">
+						<attribute name="url"><![CDATA[wlTable?gxid=${gxid}&wlqfdm=10]]></attribute>
+						<column label="关联id" name="glid" key="true" hidden="true" />
+						<column label="夹具编号" name="wlid" editable="true" hidden="false"
+							editrules="{required:true}" edittype="select" type="text">
+							<attribute name="editoptions"><![CDATA[
+									{
+										url:"wlEdit?query_wllbdm=20",
+										onChange:function(){
+											var rows = ui.table("table-gxtj-jj").getSelectedRows();
+											var rowsdata = ui.table("table-gxtj-jj").getEditRowsData(rows);
+											var rowdata = rowsdata[0];
+											var wlid = rowdata.wlid;
+											$.ajax({
+								             type: "POST",
+								             url:   ui.getRealUrl("wlSelect"),
+								             async: false,
+								             data: {wlid:wlid },
+								             success: function(data){
+								             	var wlmc = data.wlmc;
+								             	var wlgg = data.wlgg;
+								             	var wldwdm = data.wldwdm;
+								             	var wltm = data.wltm;
+								             	
+								             	ui.table("table-gxtj-jj").setCell(rows[0],"wlmc",wlmc);
+								             	ui.table("table-gxtj-jj").setCell(rows[0],"wlgg",wlgg);
+								             	ui.table("table-gxtj-jj").setCell(rows[0],"wldwdm",wldwdm);
+								             	ui.table("table-gxtj-jj").setCell(rows[0],"wltm",wltm);
+								             }
+								         });
+								        }
+									}
+						]]></attribute>
+							<attribute name="formatoptions"><![CDATA[
+							{transform : "wlbh"}
+						]]></attribute>
+						</column>
+						<column label="物料编号" name="wlbh" type="transform" />
+						<column label="关联表里的类别代码" name="wlqfdm" editable="true"
+							hidden="true" />
+						<column label="名称" name="wlmc" editable="false" /><!-- width="200" -->
+						<column label="规格" name="wlgg" editable="false" /><!-- width="100" -->
+						<column label="物料条码" name="wltm" editable="false" />
+						<column label="数量" name="wlsl" editable="true"
+							editrules="{required:true,number:true}" /><!-- TODO -->
+						<column label="单位" name="wldwdm" type="dict" dictionary="jldw"
+							editable="false" />
+						<column label="操作" name="table_action" type="operation">
+							<attribute name="formatoptions"><![CDATA[
+								[
+									{
+										name:"talbe_jj_edit",
+										icon:"icon-edit",
+										label:"编辑",
+										click:handle_table_jj_edit
+									},
+									{
+										name:"talbe_jj_del",
+										icon:"icon-delete",
+										label:"删除",
+										click:handle_table_jj_delete
+									}
+								]
+							]]></attribute>
+						</column>
+					</table>
+				</tab-content>
+
+				<tab-content name="tab-lj">
+					<normal-actions>
+						<button name="add-lj" label="添加" type="button" icon="icon-Add_to"
+							onClick="add_lj_func" />
+					</normal-actions>
+					<table name="table-gxtj-lj" showrownum="true" scroll="false"
+						editurl="" multiselect="false" url="wlTable?gxid=${gxid}"
+						layoutconstraint="md:12" showpager="false" caption="量具信息"
+						pagesize="200" onDblClickRow = "lj_double_select_func">
+						<attribute name="url"><![CDATA[wlTable?gxid=${gxid}&wlqfdm=20]]></attribute>
+						<column label="关联id" name="glid" key="true" hidden="true" />
+						<column label="量具编号" name="wlid" editable="true" hidden="false"
+							editrules="{required:true}" edittype="select" type="text">
+							<attribute name="editoptions"><![CDATA[
+									{
+										url:"wlEdit?query_wllbdm=30",
+										onChange:function(){
+											var rows = ui.table("table-gxtj-lj").getSelectedRows();
+											var rowsdata = ui.table("table-gxtj-lj").getEditRowsData(rows);
+											var rowdata = rowsdata[0];
+											var wlid = rowdata.wlid;
+											$.ajax({
+								             type: "POST",
+								             url:   ui.getRealUrl("wlSelect"),
+								             async: false,
+								             data: {wlid:wlid },
+								             success: function(data){
+								             	var wlmc = data.wlmc;
+								             	var wlgg = data.wlgg;
+								             	var wldwdm = data.wldwdm;
+								             	var wltm = data.wltm;
+								             	
+								             	ui.table("table-gxtj-lj").setCell(rows[0],"wlmc",wlmc);
+								             	ui.table("table-gxtj-lj").setCell(rows[0],"wlgg",wlgg);
+								             	ui.table("table-gxtj-lj").setCell(rows[0],"wldwdm",wldwdm);
+								             	ui.table("table-gxtj-lj").setCell(rows[0],"wltm",wltm);
+								             }
+								         });
+								        }
+									}
+						]]></attribute>
+							<attribute name="formatoptions"><![CDATA[
+							{transform : "wlbh"}
+						]]></attribute>
+						</column>
+						<column label="物料编号" name="wlbh" type="transform" />
+						<column label="关联表里的类别代码" name="wlqfdm" editable="true"
+							hidden="true" />
+						<column label="名称" name="wlmc" editable="false" /><!-- width="200" -->
+						<column label="规格" name="wlgg" editable="false" /><!-- width="100" -->
+						<column label="刀片类型条码" name="wltm" editable="false" />
+						<column label="数量" name="wlsl" editable="true"
+							editrules="{required:true,number:true}" /><!-- TODO -->
+						<column label="单位" name="wldwdm" type="dict" dictionary="jldw"
+							editable="false" />
+						<column label="操作" name="table_action" type="operation">
+							<attribute name="formatoptions"><![CDATA[
+								[
+									{
+										name:"talbe_lj_edit",
+										icon:"icon-edit",
+										label:"编辑",
+										click:handle_table_lj_edit
+									},
+									{
+										name:"talbe_lj_del",
+										icon:"icon-delete",
+										label:"删除",
+										click:handle_table_lj_delete
+									}
+								]
+							]]></attribute>
+						</column>
+					</table>
+				</tab-content>
+
+			</tabs>
+
+		</panel-body>
+	</panel>
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<button name="gxtj_save_button" label="保存" type="button"
+				context="primary" layoutconstraint="md:1;md-offset:3;" onClick="gxtj_save_func" />
+			<button name="gxtj_return_button" label="返回" type="button"
+				context="primary" layoutconstraint="md:1;md-offset:3;" onClick="gxtj_return_func" />
+		</panel-body>
+	</panel>
+
+
+	<attribute name="javascript">
+	<![CDATA[
+		var tab_flag = "tab-basicinfo";
+		function tab_show_func(tab_name){
+			tab_flag = tab_name;
+		}
+	
+		function viewReady(){
+			
+			var gyzdwj_url = ui.hidden("gyzdwj_url").val();
+			var gxtz_url = ui.hidden("gxtz_url").val();
+			
+			if(!gxtz_url){
+				var imgId = document.getElementById("image_gxtz");
+				imgId.style.visibility = "hidden";
+			}else{
+				ui.image("image_gxtz").attr("src",gxtz_url);	
+			}
+			
+			var ljtp_url = ui.hidden("ljtp_url").val();
+			ui.image("image_lj").attr("src",ljtp_url);
+		}
+		
+		function gbxx_double_select_func(){
+			var rowid = ui.table("table-gxtj-gbxx").getSelectedRows();
+			ui.table("table-gxtj-gbxx").editRow(rowid[0]);
+		}
+		
+		//添加工步信息
+		function add_gbxx_func(){
+			var rowid = new Date().getTime() ;
+			
+			var data = {djtzbh:'',djid:'',jggcms:'',qxzj_max:'',qxzj_min:'',qxsud:'',
+						zzzs:'',qxshend:'',jgl:'',wltm:'',djsm:''};
+			//var data = {};
+			ui.table("table-gxtj-gbxx").addRow(rowid,data,"last");
+			ui.table("table-gxtj-gbxx").editRow(rowid);
+			ui.table("table-gxtj-gbxx").selectRow(rowid);
+		}
+		//修改工步信息 
+		function handle_table_basic_update(name,rowid){
+		     ui.table("table-gxtj-gbxx").editRow(rowid);
+		     ui.table("table-gxtj-gbxx").selectRow(rowid);
+		}
+		//删除工步信息
+		function handle_table_basic_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+				   var row = ui.table("table-gxtj-gbxx").getRow(rowid);
+				   if(row.gbid){
+					   delete_gbxx_list.push(rowid);
+				   }
+		           ui.table("table-gxtj-gbxx").removeRow(rowid);
+				}
+			});
+		}
+		
+		var delete_gbxx_list = new Array();
+		//保存
+		function gxtj_basicinfo_save_func(){
+			basicinfo1_save_func();
+			basicinfo2_save_func();
+		}
+		//基本信息保存
+		function basicinfo1_save_func(){
+			ui.form("form-gxtj-basicinfo").ajaxSubmit(function(){	
+				//ui.success("准备Ajax提交 ...");		
+				//btn.attr("disabled",true);
+			},function(data){
+				if(data && data.message){
+					ui.error(data.message);
+				}else{
+					//ui.success("基本信息保存成功！");
+					var gxtz_url = data.gxtz_url;
+					if(gxtz_url){
+						var imgId = document.getElementById("image_gxtz");
+						imgId.style.visibility = "visible";
+						
+						ui.hidden("gxtz_url").val(gxtz_url);
+						ui.image("image_gxtz").attr("src",gxtz_url);	
+					}
+					var gyzdwj_id = data.gyzdwjid;
+					if(gyzdwj_id){
+						ui.hidden("gyzdwjid_fjid").val(gyzdwj_id);
+					}
+					ui.success("基本信息保存成功！");
+				}
+			},function(){
+				ui.error("基本信息保存失败！");
+				//btn.attr("disabled",false);
+			});
+		}
+		//工步信息保存
+		function basicinfo2_save_func(){
+			var gxid = ui.hidden("gxid").val();
+			var delete_gbxx_list_json =  JSON.stringify(delete_gbxx_list);
+            var gbxx_rowid_array = ui.table("table-gxtj-gbxx").getRowids();
+            
+            var gbxx_list_json =  JSON.stringify(gbxx_rowid_array);
+			var gbxx_url =  ui.getRealUrl("saveGbxx");
+			ui.table("table-gxtj-gbxx").saveRows(undefined,{"rowids":gbxx_list_json,
+				"delete_rowids":delete_gbxx_list_json,"gxid":gxid},gbxx_url,function(){
+				ui.table("table-gxtj-gbxx").reload();
+				delete_gbxx_list.length = 0;
+				ui.success("工步信息保存成功");
+			},function(){
+			
+			},function(){
+				ui.error("工步信息保存失败！");
+			});
+		}
+		
+		function gyzdwjid_download_func(){
+			var gyzdwjid_fjid = ui.hidden("gyzdwjid_fjid").val();
+			if(!gyzdwjid_fjid){
+				return;
+			}
+			var url = ui.getRealUrl("download") + "?wjid=" + gyzdwjid_fjid;
+			window.open(url);
+		}
+		function gxtz_download_func(){
+			var gxtz_fjid = ui.hidden("gxtz_fjid").val();
+			if(!gxtz_fjid){
+				return;
+			}
+			var url = ui.getRealUrl("download") + "?wjid=" + gxtz_fjid;
+			window.open(url);
+		}
+		
+		
+		//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑__基本信息，工步信息__↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+		//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓__设备类型信息__↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+		
+		function sblx_double_select_func(){
+			var rowid = ui.table("table-gxtj-sblx").getSelectedRows();
+			ui.table("table-gxtj-sblx").editRow(rowid[0]);
+		}
+		
+		//设备类型添加
+		function add_sblx_func(){
+			var rowid = new Date().getTime() ;
+			var gxid = ui.hidden("gxid").val();
+			var data = {gxid:gxid,sblxmc:'',sbfldm:'0',glid:''};
+			ui.table("table-gxtj-sblx").addRow(rowid,data,"first");
+			ui.table("table-gxtj-sblx").editRow(rowid);
+			ui.table("table-gxtj-sblx").selectRow(rowid);
+		}
+		
+		var delete_sblx_list = new Array();
+		//设备类型信息保存
+		function gxtj_sblx_save_func(){
+			var delete_sblx_list_json =  JSON.stringify(delete_sblx_list);
+			var sblx_url =  ui.getRealUrl("saveSblx");
+			var gxid = ui.hidden("gxid").val();
+			ui.table("table-gxtj-sblx").saveRows(undefined,{
+				"delete_rowids":delete_sblx_list_json,"gxid":gxid},sblx_url,function(){
+				ui.table("table-gxtj-sblx").reload();
+				delete_sblx_list.length = 0;
+				ui.success("设备类型保存成功");
+				return true;
+			});
+		}
+		
+		//设备类型编辑
+		function handle_table_sblx_update(name,rowid){
+			ui.table("table-gxtj-sblx").editRow(rowid);
+		}
+		
+		//设备类型删除
+		function handle_table_sblx_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+				   var row = ui.table("table-gxtj-sblx").getRow(rowid);
+				   if(row.glid){
+					   delete_sblx_list.push(rowid);
+				   }
+		           ui.table("table-gxtj-sblx").removeRow(rowid);
+				}
+			});
+		}
+		
+		//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑__设备类型信息__↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+		//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓__物料信息__↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+		
+		function wl_double_select_func(){
+			var rowid = ui.table("table-gxtj-wl").getSelectedRows();
+			ui.table("table-gxtj-wl").editRow(rowid[0]);
+		}
+		
+		//物料添加
+		function add_wl_func(){
+			var rowid = new Date().getTime() ;
+			
+			var data = {wlsl:1,wllbdm:'0',wldwdm:'0',glid:'',wlqfdm:'30'};
+			ui.table("table-gxtj-wl").addRow(rowid,data,"first");
+			ui.table("table-gxtj-wl").editRow(rowid);
+			ui.table("table-gxtj-wl").selectRow(rowid);
+		}
+		//物料删除
+		var delete_wl_list = new Array();
+		function handle_table_wl_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+		           var row = ui.table("table-gxtj-wl").getRow(rowid);
+				   if(row.glid){
+					   delete_wl_list.push(rowid);
+				   }
+		           ui.table("table-gxtj-wl").removeRow(rowid);
+				}
+			});
+		}
+		//物料编辑
+		function handle_table_wl_edit(name,rowid){
+			ui.table("table-gxtj-wl").editRow(rowid);
+		}
+		
+		//物料保存
+		function gxtj_wl_save_func(){
+			var delete_wl_list_json =  JSON.stringify(delete_wl_list);
+			var wl_url =  ui.getRealUrl("saveWl");
+			var gxid = ui.hidden("gxid").val();
+			ui.table("table-gxtj-wl").saveRows(undefined,{
+				"delete_rowids":delete_wl_list_json,"gxid":gxid},wl_url,function(){
+				ui.table("table-gxtj-wl").reload();
+				delete_wl_list.length = 0;
+				ui.success("物料保存成功");
+				return true;
+			});
+		}
+		
+		//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑__物料信息__↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+		//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓__夹具信息__↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+		
+		function jj_double_select_func(){
+			var rowid = ui.table("table-gxtj-jj").getSelectedRows();
+			ui.table("table-gxtj-jj").editRow(rowid[0]);
+		}
+		
+		//夹具添加
+		function add_jj_func(){
+			var rowid = new Date().getTime() ;
+			
+			var data = {wlsl:1,wldwdm:'0',glid:'',wlqfdm:'10'};
+			ui.table("table-gxtj-jj").addRow(rowid,data,"first");
+			ui.table("table-gxtj-jj").editRow(rowid);
+			ui.table("table-gxtj-jj").selectRow(rowid);
+		}
+		//夹具删除
+		var delete_jj_list = new Array();
+		function handle_table_jj_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+		           var row = ui.table("table-gxtj-jj").getRow(rowid);
+				   if(row.glid){
+					   delete_jj_list.push(rowid);
+				   }
+		           ui.table("table-gxtj-jj").removeRow(rowid);
+				}
+			});
+		}
+		
+		//夹具保存
+		function gxtj_jj_save_func(){
+			var delete_jj_list_json =  JSON.stringify(delete_jj_list);
+			var jj_url =  ui.getRealUrl("saveWl");
+			var gxid = ui.hidden("gxid").val();
+			ui.table("table-gxtj-jj").saveRows(undefined,{
+				"delete_rowids":delete_jj_list_json,"gxid":gxid},jj_url,function(){
+				ui.table("table-gxtj-jj").reload();
+				delete_jj_list.length = 0;
+				ui.success("夹具保存成功");
+				return true;
+			});
+		}
+		
+		//夹具编辑
+		function handle_table_jj_edit(name,rowid){
+			ui.table("table-gxtj-jj").editRow(rowid);
+		}
+		//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑__夹具信息__↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+		//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓__量具信息__↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+		
+		function lj_double_select_func(){
+			var rowid = ui.table("table-gxtj-lj").getSelectedRows();
+			ui.table("table-gxtj-lj").editRow(rowid[0]);
+		}
+		
+		//量具添加
+		function add_lj_func(){
+			var rowid = new Date().getTime() ;
+			
+			var data = {wlsl:1,wldwdm:'0',glid:'',wlqfdm:'20'};
+			ui.table("table-gxtj-lj").addRow(rowid,data,"first");
+			ui.table("table-gxtj-lj").editRow(rowid);
+			ui.table("table-gxtj-lj").selectRow(rowid);
+		}
+		//量具删除
+		var delete_lj_list = new Array();
+		function handle_table_lj_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+		           var row = ui.table("table-gxtj-lj").getRow(rowid);
+				   if(row.glid){
+					   delete_lj_list.push(rowid);
+				   }
+		           ui.table("table-gxtj-lj").removeRow(rowid);
+				}
+			});
+		}
+		
+		//量具保存
+		function gxtj_lj_save_func(){
+			var delete_lj_list_json =  JSON.stringify(delete_lj_list);
+			var lj_url =  ui.getRealUrl("saveWl");
+			var gxid = ui.hidden("gxid").val();
+			ui.table("table-gxtj-lj").saveRows(undefined,{
+				"delete_rowids":delete_lj_list_json,"gxid":gxid},lj_url,function(){
+				ui.table("table-gxtj-lj").reload();
+				delete_lj_list.length = 0;
+				ui.success("量具保存成功");
+				return true;
+			});
+		}
+		
+		//量具编辑
+		function handle_table_lj_edit(name,rowid){
+			ui.table("table-gxtj-lj").editRow(rowid);
+		}
+		
+		//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑__量具信息__↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+		//页面大保存
+		function gxtj_save_func(){
+			if(tab_flag == 'tab-basicinfo'){
+				gxtj_basicinfo_save_func();
+			}
+			if(tab_flag == 'tab-sblx'){
+				gxtj_sblx_save_func();
+			}
+			if(tab_flag == 'tab-wl'){
+				gxtj_wl_save_func();
+			}
+			if(tab_flag == 'tab-jj'){
+				gxtj_jj_save_func();
+			}
+			if(tab_flag == 'tab-lj'){
+				gxtj_lj_save_func();
+			}
+			
+		}
+		
+		function gxtj_return_func(){
+			
+			var ljid = ui.hidden("hidden-ljid").val();
+			var gyid = ui.hidden("gyid").val();
+			var url =  ui.getRealUrl("/gx/gxIndex") + "?gyid=" + gyid + "&ljid=" + ljid;
+			window.location.href= url;
+		}
+		
+		/**
+		document.onkeydown=function(event){            
+			var e = event || window.event || arguments.callee.caller.arguments[0];            
+			if(e && e.keyCode==13){     
+			 	gxtj_save_func();
+			}
+			if(e && e.keyCode==27){    //ESC退出编辑 
+			 	
+			 	if(tab_flag == 'tab-basicinfo'){
+			 	
+				}
+				if(tab_flag == 'tab-sblx'){
+				
+				}
+				if(tab_flag == 'tab-wl'){
+				
+				}
+				if(tab_flag == 'tab-jj'){
+				
+				}
+				if(tab_flag == 'tab-lj'){
+				
+				}	
+			}            
+		};
+		**/
+	]]>
+	</attribute>
+</view>

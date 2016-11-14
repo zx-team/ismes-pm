@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="CXZT" label="程序有效标识"  description="程序有效标识">
+	<field name="" value="10" label="启用" parent="" state="valid"/>
+	<field name="" value="20" label="停用" parent="" state="valid"/>
+</category>

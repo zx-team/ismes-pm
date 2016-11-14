@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工序组&加工单元关联表 -->
+<model version="1.0.1" name="pm_gxzjgdyglb">
+	<fields>
+		<glid type="pk" required="true" pk="true" comment="关联ID" label="关联ID"/>
+		<gxzid type="pk" comment="工序组ID" label="工序组ID"/>
+		<jgdyid type="pk" comment="加工单元ID" label="加工单元ID"/>
+		<jgsj type="integer" required="false" comment="加工时间(秒)" label="加工时间"/>
+		<jgjp type="integer" required="false" comment="加工节拍(秒)" label="加工节拍"/>
+		<zbsj type="integer" required="false" comment="准备时间(秒)" label="准备时间"/>
+	</fields>
+</model>

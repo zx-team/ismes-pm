@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="ljlb" title="工艺管理" onReady="viewReady">
+	<normal-actions>
+		<button name="queryBtn" label="查询"  type="button" icon="icon-query" onClick="query_but_func"/>
+	</normal-actions>
+	<table name="table-gyjm-ljlb" showrownum="true" scroll="false" 
+		editurl="" multiselect="false" url = "partsTable" layoutconstraint="md:12" 
+		showpager="true" >
+		<column label="零件id" name="ljid" key="true" hidden="true"/>
+		<column label="零件图号" name="ljbh"  hidden="false"/>
+		<column label="零件名称" name="ljmc"  hidden="false"/>
+		<column label="类别" name="ljlbdm"  type="dict" dictionary="ljlb"  editable="false"/>
+		<column label="毛坯规格" name="clbh"  type="text" editable="false" />
+		
+		<column label="零件简码" name="mpdh"  type="text" editable="false" />
+		<column label="图纸版本" name="tzbb"  type="text" editable="false" />
+		<column label="加工状态" name="jgzt"  type="dict" dictionary="ljjgzt" editable="false" />
+		
+		<column label="工艺id" name="gyid"  hidden="true"/>
+		<column label="建模状态" name="jmztdm" type="dict" dictionary="jmzt"   editable="false"/>
+		<column label="操作" name="table_action"  type="operation" editable="false">
+			<attribute name="formatoptions"><![CDATA[
+				[
+					{
+						name:"talbe_lj_jm",
+						icon:"icon-edit",
+						label:"工艺建模",
+						click:handle_table_gyjm
+					}
+				]
+			]]></attribute>
+		</column>
+	</table>
+	
+	<modal name="queryModal" heading="零件查询" sizing="small" show="false" keyboard="true"  onShown="resetQueryWindow">
+		<modal-body>
+			<form name="form-modal"  horizontal="true">
+				<form-body>
+					<form-group>
+						<label for="ljbh_query" text="零件图号" layoutconstraint="md:5"/>
+						<text name="ljbh_query" placeholder="请输入零件图号"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="ljmc_query" text="零件名称" layoutconstraint="md:5"/>
+						<text name="ljmc_query" placeholder="请输入零件名称"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="ljlb_query" text="零件类别" layoutconstraint="md:5"/>
+						<select name="ljlb_query" placeholder="请选择零件类别" dictionary="ljlb"
+							layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="cl_query" text="材料" layoutconstraint="md:5"/>
+						<text name="cl_query" placeholder="请输入材料名称"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+				</form-body>
+			</form>
+		</modal-body>
+		<modal-footer>
+			<button name="query" label="查询" type="button" context="primary" onClick ="query_lj_func"
+							layoutconstraint="md:5;sm:2;md-offset:1"/>
+			<button name="closeModalBtn" label="关闭" type="button" context="primary"
+							layoutconstraint="md:5;sm:2;md-offset:1" onClick="close_query_modal"/>
+		</modal-footer>
+	</modal>
+	
+	<attribute name="javascript">
+	<![CDATA[
+		function viewReady(){
+		
+		}
+		function resetQueryWindow() {
+	    	 $('#form-modal')[0].reset();
+	    	 ui.select('ljlb_query').val('');
+	    }
+		function query_but_func(){
+			ui.text("ljbh_query").val("");
+			ui.text("ljmc_query").val("");
+			ui.select("ljlb_query").val("");
+			ui.text("cl_query").val("");
+			
+			ui.modal("queryModal").show();
+		}
+		
+		function query_lj_func(){
+			var ljbh = ui.text("ljbh_query").val();
+			var ljmc = ui.text("ljmc_query").val();
+			var ljlb = ui.select("ljlb_query").val();
+			var clbh = ui.text("cl_query").val();
+			ui.table("table-gyjm-ljlb").search(
+				{ljbh:ljbh,ljmc:ljmc,ljlb:ljlb,clbh:clbh}
+			);
+			
+			ui.modal("queryModal").hide();
+		}
+		
+		function close_query_modal() {
+	    	ui.modal("queryModal").hide();
+	    }
+		
+		function handle_table_gyjm(name,rowid){
+			var row = ui.table("table-gyjm-ljlb").getRow(rowid);
+			var gyid = row.gyid
+			if(!gyid){
+				$.ajax({
+		             type: "POST", 
+		             url:  ui.getRealUrl("/gy/getGyid"),
+		             async: false,
+		             data: {ljid:  rowid},
+		             success: function(data){
+		             	gyid = data;
+		             }
+		         });
+			}
+			var url = ui.getRealUrl("gyjmIndex") + "?ljid=" + rowid + "&gyid=" + gyid;
+			//window.open(url);
+			window.location.href = url;
+		}
+		]]>
+	</attribute>
+</view>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工艺工序关联表 -->
+<model version="1.0.3" name="pm_gygxglb">
+	<fields>
+		<gygxglid type="pk" required="true" pk="true" comment="工艺工序关联ID" label="工艺工序关联ID"/>
+		<gyid type="pk" comment="工艺ID" label="工艺ID"/>
+		<gxid type="pk" comment="工序ID" label="工序ID"/>
+		<qxid type="pk" comment="前序ID" label="前序ID"/>
+	</fields>
+</model>

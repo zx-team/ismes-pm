@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="WLLB" label="物料类别"  description="物料类别">
+	<field name="" value="0" label=" " parent="" state="valid"/>
+	<field name="" value="10" label="刀柄" parent="" state="valid"/>
+	<field name="" value="20" label="夹具" parent="" state="valid"/>
+	<field name="" value="30" label="量具" parent="" state="valid"/>
+	<field name="" value="40" label="毛坯" parent="" state="valid"/>
+	<field name="" value="50" label="原材料" parent="" state="valid"/>
+	<field name="" value="60" label="刀片" parent="" state="valid"/>
+	<field name="" value="70" label="半成品" parent="" state="valid"/>
+</category>
+

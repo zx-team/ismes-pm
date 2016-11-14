@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="JYXM" label="检验项目"  description="检验项目">
+	<field name="" value="0" label=" " parent="" state="valid"/>
+	<field name="" value="10" label="长度" parent="" state="valid"/>
+	<field name="" value="20" label="直径" parent="" state="valid"/>
+	<field name="" value="30" label="说明" parent="" state="valid"/>
+</category>
+

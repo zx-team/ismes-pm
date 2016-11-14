@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工序物料关联表 -->
+<model version="1.0.0" name="pm_gxwlglb">
+	<fields>
+		<glid type="pk" required="true" pk="true" comment="关联ID" label="关联ID"/>
+		<gxid type="pk" comment="工序ID" label="工序ID"/>
+		<wlid type="pk" comment="物料ID" label="物料ID"/>
+		<wlqfdm type="dict" comment="物料区分代码" label="物料区分代码"/>
+		<wlsl type="decimal" length="8" precision="2" comment="物料数量" label="物料数量"/>
+	</fields>
+</model>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="pm_cxxxgl" title="程序管理" onReady="ready">
+	<panel>
+		<panel-body>
+			<normal-actions>
+				<button name="addBtn" label="添加"  type="button" icon="icon-Add_to" onClick="openAddWindow"></button>
+				<button name="queryBtn" label="查询"  type="button" icon="icon-query" onClick="openQueryWindow"></button>
+			</normal-actions>
+			<table name="table_cxgl" scroll="false" minheight="430" url="/cxgl/table_cxxxgl"  layoutconstraint="md:12;sm:12;"
+				multiselect="false">
+				<column label="程序名称" name="cxmc"></column>
+				<column label="程序ID" name="cxid" key="true" hidden="true"></column>
+				<column label="零件ID" name="ljid" hidden="true"></column>
+				<column label="零件图号" name="ljbh"  ></column>
+				<column label="零件名称" name="ljmc"  ></column>
+				<column label="工序ID" name="gxid" hidden="true"></column>
+				<column label="工序编号" name="gxbh" ></column>
+				<column label="工序名称" name="gxmc" ></column>
+				<column label="设备ID" name="sbid" hidden="true"></column>
+				<column label="设备编号" name="sbbh" ></column>
+				<column label="设备名称" name="sbmc" ></column>
+				<column label="操作" type="operation">
+					<attribute name="formatoptions"><![CDATA[
+						[
+							{
+								name:"edit",
+								icon:"icon-edit",
+								label:"编辑",
+								click:handleOperation
+							},
+							{
+								name:"del",
+								icon:"icon-delete",
+								label:"删除",
+								click:delRow
+							}
+						]
+						
+					]]></attribute>
+				</column>
+			</table>
+		</panel-body>
+	</panel>
+	<modal name="qyeryModal" heading="查询程序" sizing="large" show="false" keyboard="true" onShown="qyeryModalOnShown">
+		<modal-body>
+			<form name="form-horizontal"  horizontal="true" >
+				<form-body>
+					<form-group>
+						<label for="query_cxmc" text="程序名称" layoutconstraint="md:2;sm:2"/>
+						<text name="query_cxmc" placeholder="请输入程序名称" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_ljbh " text="零件图号" layoutconstraint="md:2;sm:2"/>
+						<text name="query_ljbh" placeholder="请输入零件图号" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_ljmc " text="零件名称" layoutconstraint="md:2;sm:2"/>
+						<text name="query_ljmc" placeholder="请输入零件名称" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_gxbh" text="工序编号" layoutconstraint="md:2;sm:2"/>
+						<text name="query_gxbh" placeholder="请输入工序编号" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_gxmc" text="工序名称" layoutconstraint="md:2;sm:2"/>
+						<text name="query_gxmc" placeholder="请输入工序名称" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_sbbh" text="设备编号" layoutconstraint="md:2;sm:2"/>
+						<text name="query_sbbh" placeholder="请输入设备编号" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+					<form-group>
+						<label for="query_sbmc" text="设备名称" layoutconstraint="md:2;sm:2"/>
+						<text name="query_sbmc" placeholder="请输入设备名称" layoutconstraint="md:7;sm:7;"/>
+					</form-group>
+				</form-body>
+			</form>
+		</modal-body>
+		<modal-footer>
+			<button name="qyeryModalClick" label="查询" type="button" context="primary" onClick="queryBtnClick"></button>
+			<button name="closeqyeryModalClick1" label="取消" type="button" context="primary"  onClick="closeQueryWindow"></button>
+		</modal-footer>
+	</modal>
+	<modal name="addModal" heading="添加/修改程序" sizing="large" show="false" keyboard="true">
+		<modal-body>
+			<form name="form_add"  horizontal="true"  action="" multipart="true">
+				<form-body>
+					<form-group>
+						<hidden name="add_cxid"/>
+						<label for="add_cxmc" text="程序名称" layoutconstraint="md:2;sm:2"/>
+						<text name="add_cxmc" placeholder="请输入程序名称" validate="{required:true}" layoutconstraint="md:6;sm:6;"/>
+					</form-group>
+					<form-group>
+						<hidden name="add_ljid"/>
+						<label for="add_ljbh" text="零件图号" layoutconstraint="md:2;sm:2"/>
+						<search name="add_ljbh"  placeholder="请输入零件图号" url="/cxgl/ljxxSelect" displaykey="label" searchkey="label value" onSelected="onSearchSelected"  validate="{required:true}" layoutconstraint="md:6;sm:6;" >
+						</search>		
+					</form-group>
+					<form-group>
+						<label for="add_ljmc" text="零件名称" layoutconstraint="md:2;sm:2"/>
+						<text name="add_ljmc" placeholder="请输入零件名称"  readonly="true" validate="{required:false}" layoutconstraint="md:6;sm:6;" />	
+					</form-group>
+					<form-group>
+						<hidden name="add_gxid"/>
+						<label for="add_gxbh" text="工序选择" layoutconstraint="md:2;sm:2"/>
+						<select name="add_gxbh" placeholder="请选择工序"  layoutconstraint="md:6;sm:6;" url="/cxgl/gxxxSelect" onChange="onSelectChange" validate="{required:true}" >
+						</select>
+					</form-group>
+					<form-group>
+						<label for="add_gxmc" text="工序名称" layoutconstraint="md:2;sm:2"/>
+						<text name="add_gxmc" placeholder="请输入工序名称"  readonly="true" validate="{required:false}" layoutconstraint="md:6;sm:6;" />	
+					</form-group>
+					<form-group>
+						<hidden name="add_sbid"/>
+						<label for="add_sbbh" text="设备编号" layoutconstraint="md:2;sm:2"/>
+						<search name="add_sbbh" placeholder="请输入设备编号" url="/cxgl/sbxxSelect" onSelected="onSbSelected" validate="{required:true}" layoutconstraint="md:6;sm:6;">
+						</search>
+					</form-group>
+					<form-group>
+						<label for="add_sbmc" text="设备名称" layoutconstraint="md:2;sm:2"/>
+						<text name="add_sbmc" placeholder="请输入设备名称"  readonly="true" validate="{required:false}" layoutconstraint="md:6;sm:6;" />	
+					</form-group>
+				</form-body>
+			</form>
+		</modal-body>
+		<modal-footer>
+			<button name="addBtnSubmit" label="提交" type="button" context="primary" onClick="saveCxInfo"/>
+			<button name="closeAddBtn" label="取消" type="button" context="primary"  onClick="closeAddWindow"></button>
+		</modal-footer>
+	</modal>
+	<attribute name="javascript">
+	<![CDATA[
+	function  ready(){
+			
+			$('.close').click(function(){
+				closeAddWindow();
+			})
+			
+		}
+		function onSearchSelected(data){
+			$('#add_ljmc').val(data.ljmc);
+			ui.hidden("add_ljid").val(data.ljid);
+			ui.select("add_gxbh").val('');
+			ui.select("add_gxbh").load({"ljid":data.ljid});
+		}
+		
+		function onSelectChange(data){
+			var gxid = ui.select("add_gxbh").val()
+			$.ajax({
+	             type: "POST",
+	             url:  ui.getRealUrl("/cxgl/getGxxxByID"),
+	             async: false,
+	             data: {gxid:gxid},
+	             success: function(data){
+	             	if(data.data != null)
+					$('#add_gxmc').val(data.data.gxmc);
+	             }
+	         });
+			ui.hidden("add_gxid").val(gxid);
+			ui.form("form_add").valid();
+		}
+		function onSbSelected(data){
+			$('#add_sbmc').val(data.sbmc);
+			ui.hidden("add_sbid").val(data.sbid);
+		}
+		
+		function saveCxInfo(){
+		
+			if(!ui.form("form_add").valid()){
+				return;
+			}
+			var add_cxid = ui.hidden("add_cxid").val();
+			var add_cxmc = $('#add_cxmc').val();
+			var add_ljid = ui.hidden("add_ljid").val();
+			var add_gxid = ui.hidden("add_gxid").val();
+			var add_sbid = ui.hidden("add_sbid").val();
+			$.ajax({
+	             type: "POST",
+	             url:  ui.getRealUrl("/cxgl/saveInfo"),
+	             async: false,
+	             data: {cxid:add_cxid, cxmc:add_cxmc, ljid:add_ljid, gxid:add_gxid, sbid:add_sbid},
+	             success: function(data){
+					if(data.data === 'success'){
+						closeAddWindow();
+						ui.success('添加成功');
+						ui.table("table_cxgl").reload();
+					}
+	             }
+	         });
+		}
+		
+		function delRow(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？", function(req){
+				if(req){
+				 	$.ajax({
+				        type: "POST",
+				        url:  ui.getRealUrl("/cxgl/delInfo"),
+				        async: false,
+				        data: {cxid:rowid},
+				        success: function(data){
+				        	if(data.data === 'success'){
+				        		ui.table("table_cxgl").removeRow(rowid);
+				            	ui.success("删除成功！");
+				        	} else {
+				        		ui.error()("删除失败！");
+				        	}
+				          	
+				         },
+				         error:function(){
+				            ui.error()("删除失败！");
+				          }
+				     });
+			     }
+		     });
+		}
+		
+		function openQueryWindow() {
+	    	ui.modal("qyeryModal").show();
+	    }
+	    function closeQueryWindow() {
+	    	ui.modal("qyeryModal").hide();
+	    }
+		function openAddWindow() {
+			
+			ui.select('add_gxbh').val('');
+			ui.select('add_gxbh').text('');
+			ui.hidden("add_cxid").val('');
+			ui.hidden("add_ljid").val('');
+			ui.hidden("add_gxid").val('');
+			ui.hidden("add_sbid").val('');  
+			
+	    	ui.modal("addModal").show();	
+	    	
+	    	$('#form_add')[0].reset(); 
+	    	$('#form_add').validate().resetForm();  	
+	    	
+	    }
+	    function closeAddWindow() {
+	    	ui.select('add_gxbh').val('');
+	    	ui.hidden("add_cxid").val('');
+			ui.hidden("add_ljid").val('');
+			ui.hidden("add_gxid").val('');
+			ui.hidden("add_sbid").val('');
+			ui.search('add_ljbh').val({value:'',label:''});
+			ui.search('add_sbbh').val({value:'',label:''});
+	    	$('#form_add')[0].reset();
+	    	$('#form_add').validate().resetForm();
+	    	ui.modal("addModal").hide();
+	    }
+	    function qyeryModalOnShown() {
+	   		$('#form-horizontal')[0].reset();
+	    }
+		var rowid;
+		
+		function queryBtnClick(){
+			var data_row = {};
+			data_row.query_ljbh = $('#query_ljbh').val();
+			data_row.query_gxbh = $('#query_gxbh').val();
+			data_row.query_cxmc = $('#query_cxmc').val();
+			data_row.query_sbbh = $('#query_sbbh').val();
+			data_row.query_ljmc = $('#query_ljmc').val();
+			data_row.query_gxmc = $('#query_gxmc').val();
+			data_row.query_sbmc = $('#query_sbmc').val();
+			ui.table("table_cxgl").search(data_row);
+			closeQueryWindow();
+		}
+		
+		function handleOperation(name,rowid) {
+			ui.hidden("add_cxid").val(rowid);
+			ui.hidden("add_ljid").val(ui.table("table_cxgl").getCell(rowid,"ljid"));
+			ui.hidden("add_gxid").val(ui.table("table_cxgl").getCell(rowid,"gxid"));
+			ui.hidden("add_sbid").val(ui.table("table_cxgl").getCell(rowid,"sbid"));
+			$('#add_cxmc').val(ui.table("table_cxgl").getCell(rowid,"cxmc"));
+			$('#add_ljmc').val(ui.table("table_cxgl").getCell(rowid,"ljmc"));
+			$('#add_gxmc').val(ui.table("table_cxgl").getCell(rowid,"gxmc"));
+			$('#add_sbmc').val(ui.table("table_cxgl").getCell(rowid,"sbmc"));
+			var ljbh = ui.table("table_cxgl").getCell(rowid,"ljbh");
+			ui.search('add_ljbh').val({value:ljbh,label:ljbh});
+			var gxid = ui.table("table_cxgl").getCell(rowid,"gxid");
+			ui.select("add_gxbh").load({"ljid":ui.hidden("add_ljid").val()})
+			ui.select('add_gxbh').val(gxid);
+			var sbbh = ui.table("table_cxgl").getCell(rowid,"sbbh");
+			ui.search('add_sbbh').val({value:sbbh,label:sbbh});
+	    	ui.modal("addModal").show();
+		}
+	]]>
+	</attribute>
+</view>

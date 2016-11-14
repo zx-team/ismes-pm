@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="CXLB" label="程序类别"  description="程序类别">
+	<field name="" value="10" label="主程序" parent="" state="valid"/>
+	<field name="" value="20" label="子程序" parent="" state="valid"/>
+</category>
+

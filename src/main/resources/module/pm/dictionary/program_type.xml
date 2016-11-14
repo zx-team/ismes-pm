@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="CXLX" label="程序类型"  description="程序类型">
+	<field name="" value="10" label="派发程序" parent="" state="valid"/>
+	<field name="" value="20" label="非派发程序" parent="" state="valid"/>
+</category>
+

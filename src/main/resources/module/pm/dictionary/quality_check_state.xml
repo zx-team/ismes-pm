@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="SFJY" label="是否检验"  description="是否检验">
+	<field name="" value="00" label="  " parent="" state="valid"/>
+	<field name="" value="10" label="检验" parent="" state="valid"/>
+	<field name="" value="20" label="不检验" parent="" state="valid"/>
+</category>

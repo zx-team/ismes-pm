@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工艺信息表 -->
+<model version="1.0.2" name="pm_gyb">
+	<fields>
+		<gyid type="pk" pk="true" comment="工艺ID" label="工艺ID"/>
+		<gyztdm type="dict" required="true" comment="工艺状态" label="工艺状态"/>
+		<ljid type="pk" required="true" comment="零件ID" label="零件ID"/>
+		<jmztdm type="dict" required="true" comment="建模状态" label="建模状态"/>
+	</fields>
+</model>

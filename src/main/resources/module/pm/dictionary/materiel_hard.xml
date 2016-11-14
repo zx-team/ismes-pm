@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="CLYD" label="材料硬度"  description="材料硬度">
+	<field name="" value="10" label="HB" parent="" state="valid"/>
+	<field name="" value="20" label="HRA" parent="" state="valid"/>
+	<field name="" value="30" label="HRB" parent="" state="valid"/>
+	<field name="" value="40" label="HRC" parent="" state="valid"/>
+</category>

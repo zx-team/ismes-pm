@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工序组 -->
+<model version="1.0.1" name="pm_gxz">
+	<fields>
+		<gxzid type="pk" required="true" pk="true" comment="工序组ID" label="工序组ID"/>
+		<gxzxh type="integer" comment="工序组序号" label="工序组序号"/>
+		<gxzbh type="string" comment="工序组编号" label="工序组编号"/>
+		<gxzmc type="string" comment="工序组名称" label="工序组名称"/>
+		<scgcid type="pk" required="true" pk="false" comment="生产过程ID" label="生产过程ID"/>
+		<gxids type="string" comment="工序IDs逗号分隔" label="工序IDs逗号分隔"/>
+	</fields>
+</model>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="jldw" label="计量单位"  description="计量单位">
+	<field name="" value="0" label=" " parent="" state="valid"/>
+	<field name="" value="10" label="件（个）" parent="" state="valid"/>
+	<field name="" value="20" label="米" parent="" state="valid"/>
+	<field name="" value="30" label="吨" parent="" state="valid"/>
+	<field name="" value="40" label="公斤" parent="" state="valid"/>
+</category>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="gxzjxlr" title="工序质检项录入" onReady="viewReady">
+	<hidden name="ljid" bind="ljid"></hidden>
+	<hidden name="gxzid" bind="gxzid"></hidden>
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<form name="form-zjbz-head">
+				<form-body>
+					<form-group>
+						<plaintext align="right" name="cpmc_label" text="产品名称：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="cpmc" bind="cpmc" layoutconstraint="md:3"/>
+						
+						<plaintext align="right" name="th_label" text="图号：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="th" bind="th" layoutconstraint="md:3"/>
+						
+						<plaintext align="right" name="cl_label" text="材料：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="cl" bind="cl"  layoutconstraint="md:3"/>
+					</form-group>
+					
+					<form-group>
+						<plaintext align="right" name="gxzbh_label" text="工序组：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="gxzbh" bind="gxzbh"  layoutconstraint="md:3"/>
+						
+						<plaintext align="right" name="gxzmc_label" text="工序组名称：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="gxzmc" bind="gxzmc" layoutconstraint="md:3"/>
+						
+						<plaintext align="right" name="jgzt_label" text="加工状态：" 
+							layoutconstraint="md:1" type="strong"/>
+						<plaintext align="left" name="jgzt" bind="jgzt"  layoutconstraint="md:3"/>
+					</form-group>
+				</form-body>
+			</form>
+			
+			<normal-actions>
+				<button name="addZjbzBtn" label="添加"  type="button" icon="icon-Add_to" onClick="addZjbz"></button>
+			</normal-actions>
+			<table name="table-zjbz" scroll="false"  onDblClickRow = "double_select_func"
+				 minheight="150" multiselect="false" pagesize = "200"
+				 layoutconstraint="md:12;sm:12;" showpager="false">
+				<attribute name="url"><![CDATA[gxzjxlrTable?ljid=${ljid}&gxzid=${gxzid}]]></attribute>
+				<column label="质检序号" name="zjxh" editable="true" 
+						type="text" editrules="{required:true,maxlength:50}"></column>
+				<column label="质检标准类型" name="zjbzlx" editable="true" 
+						  edittype="search" editrules="{required:true}">
+					<attribute name="editoptions"><![CDATA[
+					{
+						 displaykey:"label",
+						// searchkey:"label pinyin1 pinyin2",
+						 valuekey:"label",
+						 url:"/scgc/searchZjbzlx"
+						 //,
+						 //onSelected : function(data){
+						 //	ui.info("Selected data",JSON.stringify(data));
+						 //}
+					}
+				]]></attribute>		
+				</column>
+				<column label="工序质检项录入id" name="gxzjxlrid" key="true" hidden="true"></column>
+				<column label="检验项目" name="jyxm" editable="true" type="dict" 
+						dictionary="JYXM" editrules="{required:true}">
+					<attribute name="editoptions"><![CDATA[
+					{
+						onChange:function(data){
+							var rowid = data.target.id.split("_")[0];
+							var jyxm_val = ui.select( rowid + "_jyxm").val();
+							var gyyq_val = $('#'+rowid+"_gyyq").val();
+							if(jyxm_val == '20'){
+								if(!(gyyq_val.indexOf("Φ") > -1)){
+									$('#'+rowid+"_gyyq").val( "Φ" + gyyq_val);
+								}
+							}else{
+								if(gyyq_val.indexOf("Φ") > -1){
+									var str = gyyq_val.replace("Φ","");
+									$('#'+rowid+"_gyyq").val(str);
+								}
+							}	
+						}
+					}
+				]]></attribute>				
+				</column>
+				<column label="工艺要求" name="gyyq" editable="true" 
+						type="text" editrules="{required:true,maxlength:200}"></column>
+				<column label="允许上限" name="yxsx" editable="true" formatter="number_func"
+						type="number" editrules="{required:true,number:true,maxlength:8,max:99999,min:0}"></column>
+				<column label="允许下限" name="yxxx" editable="true" formatter="number_func"
+						type="number" editrules="{required:true,number:true,maxlength:8,max:99999,min:0}"></column>
+				<!-- 工序质检增加四项是否检查 -->
+				<column label="首末件是否检" name="swjsfj" editable="true" type="dict"
+						dictionary="SFJY" editrules="{required:false}">
+				</column>
+				<column label="巡检是否检" name="xjsfj" editable="true" type="dict"
+						dictionary="SFJY" editrules="{required:false}">
+				</column>
+				<column label="换线是否检" name="hxsfj" editable="true" type="dict"
+						dictionary="SFJY" editrules="{required:false}">
+				</column>
+				<column label="自检是否检" name="zjsfj" editable="true" type="dict"
+						dictionary="SFJY" editrules="{required:false}">
+				</column>
+				<column label="质检员是否检" name="zjysfj" editable="true" type="dict"
+						dictionary="SFJY" editrules="{required:false}">
+				</column>
+				<column label="操作" type="operation">
+					<attribute name="formatoptions"><![CDATA[
+							[
+								{
+									name:"edit",
+									icon:"icon-edit",
+									label:"编辑",
+									click:editZlbz
+								},
+								{
+									name:"del",
+									icon:"icon-delete",
+									label:"删除",
+									click:deleteZlbz
+								}
+							]
+						]]></attribute>
+				</column>
+			</table>
+		<button name="returnBtn" label="返回"  type="button" context="primary" onClick="return_func" layoutconstraint="md:1;sm:2;md-offset:5;sm-offset:5"></button>
+		</panel-body>
+		<!-- <panel-footer>
+			<button name="returnBtn" label="返回"  type="button" icon="icon-reload" onClick="return_func"></button>
+		</panel-footer> -->
+	</panel>
+	
+	<attribute name="javascript">
+	<![CDATA[
+		function viewReady(){
+		
+		}
+		
+		function double_select_func(){
+			var rowid = ui.table("table-zjbz").getSelectedRows();
+			ui.table("table-zjbz").editRow(rowid[0]);
+		}
+		
+		function editZlbz(name,rowid){
+			ui.table("table-zjbz").editRow(rowid);
+		}
+		
+		function deleteZlbz(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+				   var row = ui.table("table-zjbz").getRow(rowid);
+				   if(row.gxzjxlrid){
+					   delete_zjbz_list.push(rowid);
+				   }
+		           ui.table("table-zjbz").removeRow(rowid);
+				}
+			});
+		}
+		
+		function addZjbz(){
+			var rowid = new Date().getTime() ;
+			
+			var data={gxzjxlrid:'',zjxh:'',zjbzlx:'',jyxm:'',gyyq:'',yxsx:'',yxxx:''};
+			ui.table("table-zjbz").addRow(rowid,data,"last");
+			ui.table("table-zjbz").editRow(rowid);
+			ui.table("table-zjbz").selectRow(rowid);
+		}
+		
+		
+		document.onkeydown=function(event){ 
+			var e = event || window.event || arguments.callee.caller.arguments[0];
+			if(e && e.keyCode==13){
+				saveTables();
+			}   
+			if(e && e.keyCode==27){
+				var rows = ui.table("table-zjbz").getSelectedRows();
+				ui.table("table-zjbz").restoreRow(rows[0]);
+			}
+		};
+		
+		var delete_zjbz_list = new Array();
+		function saveTables(){
+			
+			var saveUrl = ui.getRealUrl("saveGxzjxlrb");
+			var delete_zjbz_list_json =  JSON.stringify(delete_zjbz_list);
+			var ljid = ui.hidden("ljid").val();
+			var gxzid = ui.hidden("gxzid").val();
+			
+			ui.table("table-zjbz").saveRows(undefined,{
+				"delete_rowids":delete_zjbz_list_json,"ljid":ljid,"gxzid":gxzid},
+				saveUrl,function(){
+					ui.table("table-zjbz").reload();
+					delete_zjbz_list.length = 0;
+					ui.success("保存成功");
+					return true;
+			},function(){
+				ui.error("保存失败！");
+			});
+		}
+		
+		function number_func(number){
+		 	if (isNaN(number)) {    
+           	 	return;    
+       		}
+       		if(parseFloat(number) == 0){
+       			return '0.000';
+       		}
+       		if(!number){
+       			return '';
+       		}
+			return number.toFixed(3);
+		}
+		
+		function column_undefined(value){
+		 	
+		 	if(null == value){
+		 		return '';
+		 	}else if ('10' == value){
+		 		return '检验';
+		 	}else if ('20' == value){
+		 		return '不检验';
+		 	}else{
+		 		return value;
+		 	}
+		}
+		
+		function return_func(){
+		//scgc/index?ljid=131390
+			var url = ui.getRealUrl("index") + "?ljid=" + ui.hidden("ljid").val();
+			window.location.href = url;
+		}
+	]]>
+	</attribute>
+</view>

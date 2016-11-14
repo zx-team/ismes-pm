@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 数据字典表 -->
+<model version="1.0.0" name="pm_sjzdb">
+	<fields>
+		<id type="pk" required="true" pk="true" comment="id" label="id"/>
+		<type type="string" required="false" maxlength="100" comment="type" label="type"/>
+		<title type="string" required="false" maxlength="100" comment="title" label="title"/>
+		<value type="string" required="false" maxlength="100" comment="title" label="title"/>
+		<label type="string" required="false" maxlength="100" comment="label" label="label"/>
+		<pinyin1 type="string" required="false" maxlength="100" comment="pinyin1" label="pinyin1"/>
+		<pinyin2 type="string" required="false" maxlength="100" comment="pinyin2" label="pinyin2"/>
+	</fields>
+</model>
+

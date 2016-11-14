@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 生产过程-->
+<model version="1.0.0" name="pm_scgc">
+	<fields>
+		<scgcid type="pk" required="true" pk="true" comment="生产过程ID" label="生产过程ID"/>
+		<ljid type="pk" required="true" comment="零件ID" label="零件ID"/>
+		<scgcmc type="string" required="true" maxlength="20" comment="生产过程名称" label="生产过程名称"/>
+		<ljjgzt type="dict" required="true" comment="零件加工状态" label="零件加工状态"/>
+	</fields>
+</model>

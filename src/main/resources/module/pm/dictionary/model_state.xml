@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="jmzt" label="建模状态"  description="建模状态">
+	<field name="" value="10" label="未制作" parent="" state="valid"/>
+	<field name="" value="20" label="制作中" parent="" state="valid"/>
+	<field name="" value="30" label="已发布" parent="" state="valid"/>
+</category>
+

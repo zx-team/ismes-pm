@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="scgcgl" title="生产过程管理" onReady="viewReady">
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<form name="form-cpxx-head" horizontal="true">
+				<form-body>
+					<form-group layoutconstraint="md:12;md-offset:0;">
+						<label for="cpmc" text="零件名称" layoutconstraint="md:1"/>
+						<input-group layoutconstraint="md:2">
+							<plaintext align="left" name="cpmc" bind="cpmc"/>
+						</input-group>
+						<label for="th" text="零件图号：" layoutconstraint="md:1"/>
+						<input-group layoutconstraint="md:2">
+							<plaintext align="left" name="th" bind="th"/>
+						</input-group>
+						<label for="th" text="图纸版本：" layoutconstraint="md:1"/>
+						<input-group layoutconstraint="md:2">
+							<plaintext align="left" name="tzbb" bind="tzbb"/>
+						</input-group>
+					</form-group>
+				</form-body>
+			</form>
+		</panel-body>
+	</panel>
+	<hidden name = "ljid" bind="ljid"></hidden>
+	<normal-actions>
+		<button name="addBtn" icon="icon-Add_to" label="添加"  type="button" onClick="addScgc"></button>
+	</normal-actions>
+	<table name="table-scgc" scroll="false"  url="/scgc/table_scgc?ljid=${ljid}" minheight="100" layoutconstraint="md:12;sm:12;" pagesize="200" showpager="false" onLoaded="scgcTableOnLoaded" onSelectRow="scgcTableOnSelect">
+		<column label="生产过程名称" name="scgcmc"  editable="true" editrules="{required:true}"></column>
+		<column label="生产过程ID" name="scgcid" key="true" hidden="true" editrules="{required:true}"></column>
+		<column label="加工状态" name="ljjgzt"  type = "dict" editable="true" dictionary="ljjgzt" editrules="{required:true}"></column>
+		<column label="操作" type="operation">
+		<attribute name="formatoptions"><![CDATA[
+					[
+						{
+							name:"edit",
+							icon:"icon-edit",
+							label:"编辑",
+							click:editScgc
+						},
+						{
+							name:"del",
+							icon:"icon-delete",
+							label:"删除",
+							click:delScgc
+						}
+					]
+				]]></attribute>
+		</column>
+		<column label="新增标记" name="isNew"  hidden="true" ></column>
+	</table>
+	<normal-actions>
+		<button name="insertNew" label="添加"  type="button" icon="icon-Add_to" onClick="addGxz"/>
+	</normal-actions>
+	<table name="table-gxz" autoload="false" showrownum="false" scroll="false" minheight="430" 
+		editurl="" multiselect="false" url = "gxzTable" layoutconstraint="md:12" showpager="false" onLoaded="gxzTableOnLoaded" onSelectRow="gxzTableOnSelect">
+		<column label="工序组序号" name="gxzxh" hidden="false" editable="false"/>
+		<column label="工序组ID" name="gxzid" key="true" hidden="true"/>
+		<column label="工序组编号" name="gxzbh" hidden="false" editable="false"/>
+		<column label="工序IDs" name="gxids" hidden="true" editable="false"/>
+		<column label="工序组名称" name="gxzmc" hidden="false" editable="false"/>
+		<column label="所选加工单元" name="sxjgdy" type="text" editable="false" />
+		<column label="质检标准" name="zjbz"  type="text" formatter="zjbzFmt" editable="false" />
+		<column label="操作" name="table_action"  type="operation" editable="false">
+			<attribute name="formatoptions"><![CDATA[
+				[
+					{
+						name:"talbe_gxz_edit",
+						icon:"icon-Modify-working-group",
+						label:"修改工序组",
+						click:handle_table_gxz_edit
+					},
+					{
+						name:"talbe_gxz_delete",
+						icon:"icon-delete",
+						label:"删除",
+						click:handle_table_gxz_delete
+					},
+					{
+						name:"talbe_gxz_scgc",
+						icon:"icon-Modify-processing-unit",
+						label:"修改加工单元",
+						click:handle_table_gxz_jgdy
+					}
+				]
+			]]></attribute>
+		</column>
+	</table>
+	<bunch layoutconstraint="md:2;sm:2;md-offset:5;sm-offset:5">
+		<button name="backBtn" label="返回"  type="button" context="primary" onClick="backBtnClick"></button>
+	</bunch>
+	<modal name="modal-gxz" heading="选择工序组" sizing="large" show="false" keyboard="true" onShown="gxzModalOnShown" onHidden="gxzModalOnHidden">
+		<modal-body>
+			<form name="form-modal"  horizontal="true" action="/scgc/saveGxz" method="post">
+				<form-body>
+					<hidden name="gxzid"></hidden>
+					<hidden name="gxids"></hidden>
+					<hidden name="scgcid"></hidden>
+					<form-group>
+						<label for="gxzxh" text="工序组序号" layoutconstraint="md:2"/>
+						<number name="gxzxh" layoutconstraint="md:2;"  placeholder="请输入工序组序号" bind="gxzxh"
+											readonly="false" format="###,###" value="0" validate="{required:true}" />
+						<label for="gxzbh" text="工序组编号" layoutconstraint="md:1"/>
+						<text name="gxzbh" placeholder="请输入工序组编号"  bind="gxzbh"
+							readonly="false" layoutconstraint="md:2;"  validate="{required:true,maxlength:50}"/>
+						<label for="gxzmc" text="工序组名称" layoutconstraint="md:2"/>
+						<text name="gxzmc" placeholder="工序组名称" bind="gxzmc"
+							readonly="false" layoutconstraint="md:2;"  validate="{required:true,maxlength:24}"/>
+					</form-group>
+				</form-body>
+			</form>
+			<table name="table-gx" autoload="false" url="/scgc/gxTable" showrownum="false" scroll="false" multiselect="true" showpager="false" onLoaded="gxTableLoaded">
+				<column label="工序编号" name="gxbh"></column>
+				<column label="工序ID" key="true" name="gxid" hidden="true"></column>
+				<column label="工序名称" name="gxmc"></column>
+			</table>
+		</modal-body>
+		<modal-footer>
+			<button name="save" label="保存" type="button" context="primary" onClick ="saveGxz"
+							layoutconstraint="md:2;md-offset:4"/>
+			<button name="closeGxzModalBtn" label="关闭" type="button" context="primary"
+							layoutconstraint="md:2;md-offset:2" onClick="close_gxz_modal"/>
+		</modal-footer>
+	</modal>
+	<modal name="modal-jgdy" heading="选择加工单元" sizing="large" show="false" keyboard="true" onShown="jgdyModalOnShown" onHidden="jgdyModalOnHidden">
+		<modal-body>
+			<hidden name="gxidsForJgdy"></hidden>
+			<hidden name="gxzidForJgdy"></hidden>
+			<normal-actions>
+				<button name="addJgdyBtn" label="添加"  type="button" icon="icon-Add_to" onClick="addJgdy"></button>
+			</normal-actions>
+			<table name="table-jgdy" autoload="false" scroll="false"  url="jgdyTable" minheight="150" multiselect="false" onLoaded="jgdyOnReloaded" layoutconstraint="md:12;sm:12;" pagesize="200"  showpager="false">
+				<column label="加工单元编号" name="jgdybh" editable="true" editrules="{required:true}" type="text" edittype="search">
+						<attribute name="editoptions"><![CDATA[
+							{
+								displaykey:"label",
+								searchkey:"label",
+								valuekey:"value",
+								url:"jgdyEdit?gxids="+ui.hidden("gxidsForJgdy").val(),
+								onSelected : function(data){
+									var rowids = ui.table("table-jgdy").getRowids();
+								 	$('#'+rowids[rowids.length - 1]+"_jgdyid").val(data.jgdyid);
+								 	ui.table("table-jgdy").setCell(rowids[rowids.length - 1], 'jgdybhxf',data.jgdybh);
+								 	ui.table("table-jgdy").setCell(rowids[rowids.length - 1], 'jgdymc',data.jgdymc);
+								 }
+							}
+						]]></attribute>
+				</column>
+				<column label="加工单元ID" name="jgdyid" hidden="true" editable="true"></column>
+				<column label="关联ID" name="glid" key="true" hidden="true"></column>
+				<column label="加工单元编号" name="jgdybhxf" hidden="true"></column>
+				<column label="加工单元名称" name="jgdymc"></column>
+				<column label="加工时间(秒)" name="jgsj" editable="true" editrules="{required:true,digits:true,maxlength:6,min:1}"></column>
+				<column label="加工节拍(秒)" name="jgjp" editable="true" editrules="{required:true,digits:true,maxlength:6,min:1}"></column>
+				<column label="准备时间(秒)" name="zbsj" editable="true" editrules="{required:true,digits:true,maxlength:6,min:1}"></column>
+				<column label="操作" type="operation">
+					<attribute name="formatoptions"><![CDATA[
+							[
+								{
+									name:"edit",
+									icon:"icon-edit",
+									label:"编辑",
+									click:editJgdy
+								},
+								{
+									name:"del",
+									icon:"icon-delete",
+									label:"删除",
+									click:deleteJgdy
+								}
+							]
+						]]></attribute>
+				</column>
+				<column label="新增标记" name="isNew"  hidden="true" ></column>
+			</table>
+		</modal-body>
+		<modal-footer>
+			<button name="closeJgdyModalBtn" label="关闭" type="button" context="primary"
+							layoutconstraint="md:2;md-offset:5" onClick="close_jgdy_modal"/>
+		</modal-footer>
+	</modal>
+	
+	<attribute name="javascript">
+	<![CDATA[
+		function backBtnClick() {
+			window.location.href=ui.getUrl("/pm/ljgl/index");
+		}
+		//记录全局
+		var editid = "";//rowid
+		var jgdyModalShowing = false; 
+		var gxzModalShowing = false; 
+		var scgcTableEditing = false;
+		document.onkeydown=function(event){ 
+			var e = event || window.event || arguments.callee.caller.arguments[0];
+			if(e && e.keyCode==13){
+				if (jgdyModalShowing) {
+					saveJgdy();// 保存加工单元
+				} else {
+					if (!gxzModalShowing && scgcTableEditing) {
+						//20161110 add by maww 生产过程只能为-0 -2 且不能重复
+						var rowids = ui.table("table-scgc").getRowids();
+						var ljjgzt_edit = ui.table("table-scgc").getEditRowsData(rowids)[0].ljjgzt;
+						var ljjgzt = '';
+						for (var i=0;i<rowids.length;i++){
+							ljjgzt = ui.table("table-scgc").getCell(rowids[i],"ljjgzt");
+							if (ljjgzt_edit == ljjgzt){
+								ui.warn("生产过程的加工状态不能重复!", "提示!");
+								return;
+							}
+						}
+						saveScgc();// 保存生产过程
+					}
+				}
+			}   
+			if(e && e.keyCode==27){
+				ui.table("table_sblx").restoreRow(editid);
+			 	editid = "";//ESC退出编辑
+			}
+		};
+		
+		function zjbzFmt(name, data) {
+			var gxzid = data.rowId;
+			var ljid = ui.hidden("ljid").val();
+			var scgcRows = ui.table("table-scgc").getSelectedRows();
+			var scgcRowData = ui.table("table-scgc").getRow(scgcRows[0]);
+			var jgzt =  scgcRowData.ljjgzt;
+			
+			var url = ui.getRealUrl("gxzjxlr");
+			url = url + "?ljid=" + ljid + "&gxzid="+gxzid+"&jgzt="+jgzt;
+			return "<a href='"+url+"'>质检标准</a>";
+		}
+		
+		function viewReady() {
+			
+		}
+		
+		//添加加工单元
+	 	function addJgdy() {
+	 		var rowid = new Date().getTime();
+			var data = {jgdybh:'', isNew:true};
+			ui.table("table-jgdy").addRow(rowid, data, "last");
+			ui.table("table-jgdy").editRow(rowid);
+			ui.table("table-jgdy").selectRow(rowid);
+		}
+		//编辑加工单元
+	 	function editJgdy(name,rowid){
+	 		ui.table("table-jgdy").editRow(rowid);
+		}
+		//保存加工单元
+		function saveJgdy(){
+			var gxzid = ui.hidden("gxzidForJgdy").val();
+			var jgdy_save_url =  ui.getRealUrl("saveJgdy");
+			ui.table("table-jgdy").saveRows(undefined, {gxzid:gxzid}, jgdy_save_url,
+				function(){
+					ui.table("table-jgdy").search({gxzid:gxzid});
+					ui.success("生产过程保存成功");
+				},function(){
+				
+				},function(){
+					ui.error("生产过程保存失败！");
+				}
+			);
+		}
+		
+		//删除加工单元
+	 	function deleteJgdy(name,rowid){
+	 		if(ui.table("table-jgdy").getCell(rowid,"isNew"))
+		 	{
+		 		ui.table("table-jgdy").removeRow(rowid);
+		 		return;
+		 	}
+		 	ui.confirm("您确定要删除该条记录吗？", function(req){
+				if(req){
+				 	$.ajax({
+				        type: "POST",
+				        url:  ui.getRealUrl("/scgc/del_jgdy"),
+				        async: false,
+				        data: {glid : rowid},
+				        success: function(data){
+				          	ui.table("table-jgdy").removeRow(rowid);
+				            ui.success("删除成功！");
+				         },
+				         error:function(){
+				            ui.error()("删除失败！");
+				          }
+				     });
+			     }
+		     });
+		}
+		// 加工单元列表加载完成
+		function jgdyOnReloaded() {
+		}
+		
+		function gxzTableOnLoaded() {
+			var rowids = ui.table("table-gxz").getRowids();
+			if (rowids.length != 0) {
+				ui.table("table-gxz").selectRow(rowids[0]);
+			}
+		}
+		
+		function gxzTableOnSelect(rowid, status) {
+			ui.hidden("gxzidForJgdy").val(rowid);
+			ui.hidden("gxidsForJgdy").val(ui.table("table-gxz").getRow(rowid).gxids);
+			//alert(ui.hidden("gxidsForJgdy").val());
+		}
+		
+		function addGxz(){
+			var selectedIds = getSelectedRowids("table-scgc");
+			if (selectedIds.length == 0) {
+				ui.warn("请选择生产过程");
+				return;
+			}
+			ui.table("table-gx").search({ljid:ui.hidden('ljid').val()});
+			ui.hidden("gxids").val('');
+			
+			// 最后一条记录工序序号+1，初始化显示
+			var rowids = ui.table("table-gxz").getRowids();
+			if (rowids.length != 0) {
+				var lastRow = ui.table("table-gxz").getRow(rowids[rowids.length - 1]);
+				ui.number("gxzxh").val(parseInt(lastRow.gxzxh) + 1);
+				
+			} else {
+				ui.number("gxzxh").val(1);
+			}
+			
+			ui.modal("modal-gxz").show();
+			// 触发gxTableLoaded
+		}
+		
+		function gxTableLoaded() {
+			if (ui.hidden("gxids").val()) {
+				var gxids = JSON.parse(ui.hidden("gxids").val());
+				for (var i = 0; i < gxids.length; i++) {
+					ui.table("table-gx").selectRow(gxids[i]);
+				}
+			}
+		}
+		
+		function jgdyTableLoaded() {
+			if (ui.hidden("jgdyids").val()) {
+				var jgdyids = JSON.parse(ui.hidden("jgdyids").val());
+				for (var i = 0; i < jgdyids.length; i++) {
+					ui.table("table-jgdy").selectRow(jgdyids[i]);
+				}
+			}
+		}
+		
+		function saveGxz(){
+			var gxids = getSelectedRowids("table-gx");
+			if (gxids.length == 0) {
+				ui.warn('请选择工序');
+				return;
+			} else {
+				ui.hidden("gxids").val(JSON.stringify(gxids));
+			}
+			ui.hidden("scgcid").val(getSelectedRowids("table-scgc")[0]);
+			ui.form("form-modal").ajaxSubmit(function(){
+				//校验表单
+			},function(data){
+				  ui.hidden("gxids").val('');
+				  $('#form-modal')[0].reset();
+				  ui.success("保存成功！");
+		          ui.table("table-gxz").reload();
+		          ui.modal("modal-gxz").hide();
+			},function(){
+				ui.error("保存失败！");
+				ui.modal("modal-gxz").hide();
+			});
+		}
+		
+		function jgdyModalOnShown() {
+			jgdyModalShowing = true;
+		}
+		
+		function jgdyModalOnHidden() {
+			jgdyModalShowing = false;
+			ui.table("table-gxz").reload();
+		}
+		
+		function gxzModalOnShown() {
+			gxzModalShowing = true;
+		}
+		
+		function gxzModalOnHidden() {
+			gxzModalShowing = false;
+		}
+		
+		function handle_table_gxz_jgdy(name, rowid) {
+			ui.table("table-gxz").selectRow(rowid);
+			//var gxids = ui.table("table-gxz").getRow(rowid).gxids;
+			ui.hidden("gxzidForJgdy").val(rowid);
+			ui.table("table-jgdy").search({gxzid:rowid});
+			ui.modal("modal-jgdy").show();
+		}
+		
+		function handle_table_gxz_edit(name, rowid){
+			$.ajax({
+		             type: "POST",
+		             url:  ui.getRealUrl("initGxz"),
+		             async: false,
+		             data: {gxzid :  rowid},
+		             success: function(data){
+		             	ui.hidden("gxzid").val(data.data.gxzid);
+		             	ui.hidden("gxids").val(data.data.gxids);
+						ui.text("gxzxh").val(data.data.gxzxh);
+						ui.text("gxzbh").val(data.data.gxzbh);
+						ui.text("gxzmc").val(data.data.gxzmc);
+						ui.table("table-gx").search({ljid:ui.hidden('ljid').val()});
+						// 触发 gxTableLoaded
+						ui.modal("modal-gxz").show();
+		             }
+		         });
+		}
+		
+		function handle_table_gxz_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+					$.ajax({
+			             type: "POST",
+			             url:   ui.getRealUrl("deleteGxz"),
+			             async: false,
+			             data: {gxzid : rowid },
+			             success: function(data){
+			             	ui.table("table-gxz").reload();
+			             }
+			         });
+				}
+			});
+		}
+		
+		function close_gxz_modal(){
+			ui.modal("modal-gxz").hide();
+			$('#form-modal')[0].reset();
+		}
+		
+		function close_jgdy_modal(){
+			ui.modal("modal-jgdy").hide();
+		}
+		
+	    // 生产过程表格操作
+		function addScgc() {
+			//20161110 add by maww 最多添加2个生产过程
+			var rowids = ui.table("table-scgc").getRowids();
+			if (rowids.length >= 2){
+				ui.warn("最多添加2个生产过程!","提示!");
+				return;
+			}
+			var rowid = new Date().getTime();
+			var data = {scgcmc:'',jgzt:'', isNew:true};
+			ui.table("table-scgc").addRow(rowid, data, "last");
+			ui.table("table-scgc").editRow(rowid);
+			ui.table("table-scgc").selectRow(rowid);
+			scgcTableEditing = true;
+		}
+		function delScgc(name,rowid) {
+		 	if(ui.table("table-scgc").getCell(rowid,"isNew"))
+		 	{
+		 		ui.table("table-scgc").removeRow(rowid);
+		 		editid = "";
+		 		return;
+		 	}
+		 	ui.confirm("您确定要删除该条记录吗？", function(req){
+				if(req){
+				 	$.ajax({
+				        type: "POST",
+				        url:  ui.getRealUrl("/scgc/del_scgc"),
+				        async: false,
+				        data: {scgcid : rowid},
+				        success: function(data){
+				          	ui.table("table-scgc").reload();
+				            ui.success("删除成功！");
+				         },
+				         error:function(){
+				            ui.error()("删除失败！");
+				          }
+				     });
+			     }
+		     });
+		}
+		
+		function editScgc(name,rowid){
+			ui.table("table-scgc").editRow(rowid);
+			scgcTableEditing = true;
+		}
+		
+		var scgcSaving = false;
+		
+		function saveScgc(){
+			var ljid = ui.hidden('ljid').val();
+			var gbxx_url =  ui.getRealUrl("saveScgc");
+			ui.table("table-scgc").saveRows(undefined, {ljid:ljid}, gbxx_url,
+				function(){
+					scgcSaving = true;
+					ui.table("table-scgc").search({ljid:ljid});
+					ui.success("生产过程保存成功");
+				},function(){
+				
+				},function(){
+					ui.error("生产过程保存失败！");
+				}
+			);
+		}
+		
+		function scgcTableOnLoaded() {
+			var rowids = ui.table("table-scgc").getRowids();
+			if (rowids.length != 0) {
+				if (scgcSaving) {
+					// 如果是保存触发的，选最后一行
+					ui.table("table-scgc").selectRow(rowids[rowids.length - 1]);
+					scgcSaving = false;
+				} else {
+					ui.table("table-scgc").selectRow(rowids[0]);
+				}
+			}
+			scgcTableEditing = false;
+		}
+		
+		function scgcTableOnSelect(rowid, status) {
+			if (ui.table("table-scgc").getRow(rowid).isNew) {
+				return;
+			}
+			console.log('aaaaaaaaaaaaaaaaaaaaaa');
+			ui.table("table-gxz").search({scgcid:rowid});
+		}
+		
+		function getSelectedRowids(tableName) {
+			return ui.table(tableName).getSelectedRows();
+		}
+	]]>
+	</attribute>
+</view>

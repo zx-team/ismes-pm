@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="gyjm" title="工艺管理" onReady="viewReady">
+	
+	<hidden name="ljtp_url" bind="partsInfo.url"></hidden>
+	
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<bunch layoutconstraint="md:2">
+				<image shape="thumbnail" name="image_lj" popshow="true" src="" layoutconstraint="md:4"  />
+			</bunch>
+		
+			<bunch layoutconstraint="md:10">
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljmc" text="零件名称 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljmc" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljbh" text="零件图号 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_mpdh" text="零件简码 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.mpdh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_tzbb" text="图纸版本 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.tzbb" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="毛坯规格 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.clbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="加工状态 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.jgzt_str" align = "center" layoutconstraint="md:12" />
+				</bunch>
+			</bunch>
+			
+			
+		</panel-body>
+	</panel>
+
+	<normal-actions>
+		<button name="gyjm-lb" label="工序列表"  type="button" icon="icon-list"	 onClick="gyjm_lb_func"/>
+		<button name="gyjm-bc" label="保存"  type="button" icon="icon-Preservation"	onClick="gyjm_bc_func"/>
+		<button name="gyjm-fb" label="发布"  type="button" icon="icon-Release" onClick="gyjm_fb_func"/>
+	</normal-actions>
+	<hidden name = "ljid" bind = "ljid"></hidden>
+	<hidden name = "gyid" bind = "gyid"></hidden>
+	<bag name="bag_data">
+		<item name="nodes" type="json" bind="nodes"/>
+		<item name="toolBtns" type="json" bind="toolBtns"/>
+		<item name="data" type="json"	bind="data"/>
+	</bag>
+	<mega name="gyjm_mega" height="400" layoutconstraint="md:12;" onSave="handleOnSave" />
+	<!-- 增加返回按钮 -->
+	<normal-actions layoutconstraint="md:2;sm:2;md-offset:3;sm-offset:3">
+		<button name="backBtn" label="返回"  type="button" context="primary" onClick="backBtnClick"></button>
+	</normal-actions>
+	
+	<attribute name="javascript">
+	<![CDATA[
+		var megaName;
+		function viewReady() {
+		
+			var ljid = ui.hidden("ljid").val();
+			var gyid = ui.hidden("gyid").val();
+			
+			var mega = document.getElementById("gyjm_mega");
+			megaName = "gyjm_mega-ljid_" + ljid + "-gyid_"+gyid;
+			mega.setAttribute('name',megaName);
+			mega.setAttribute('id',megaName);
+			
+			
+			ui.mega(megaName).setNodes(ui.bag("bag_data").get("nodes"));
+			ui.mega(megaName).setToolBtns(ui.bag("bag_data").get("toolBtns"));
+			ui.mega(megaName).loadData(ui.bag("bag_data").get("data"));
+			
+			var ljtp_url = ui.hidden("ljtp_url").val();
+			ui.image("image_lj").attr("src",ljtp_url);
+		}
+		
+		function gyjm_lb_func(){
+			var ljid =  ui.hidden("ljid").val();
+			var gyid =  ui.hidden("gyid").val();
+			var url =  ui.getRealUrl("/gx/gxIndex") + "?gyid=" + gyid + "&ljid=" + ljid;
+			window.location.href= url;
+		}
+		
+		function gyjm_bc_func(){
+			var ljid =  ui.hidden("ljid").val();
+			var gyid =  ui.hidden("gyid").val();
+			$.ajax({
+		             type: "POST", 
+		             url:  ui.getUrl("/pm/gy/gyjmSave"),
+		             async: false,
+		             data: {data:  JSON.stringify(ui.mega(megaName).exportData()),
+		             	ljid : ljid,gyid :  gyid},
+		             success: function(data){
+		             	if(data == 'OK'){
+		             		ui.success("保存成功!", "提示!");
+		             	}else{
+			             	ui.error(""+data, "提示:");
+		             	}
+		             }
+		         });
+		}
+		
+		function gyjm_fb_func(){
+			$.ajax({
+		             type: "POST",
+		             url:  ui.getRealUrl("/gy/gyfb"),
+		             async: false,
+		             data: {gyid :  ui.hidden("gyid").val()},
+		             success: function(data){
+		             	if(data == 'OK'){
+		             		ui.success("发布成功");
+		             	}else{
+			             	ui.error(data);
+		             	}
+		             }
+		         });
+		}
+		
+		function handleOnSave(){
+			gyjm_bc_func();
+		}
+		
+		function backBtnClick() {
+			window.location.href=ui.getUrl("/pm/gy/partsIndex");
+		}
+	]]>
+	</attribute>
+</view>

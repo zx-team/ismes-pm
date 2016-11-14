@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="wlqfdm" label="物料区分代码"  description="物料区分代码">
+	<field name="" value="10" label="夹具" parent="" state="valid"/>
+	<field name="" value="20" label="量具" parent="" state="valid"/>
+	<field name="" value="30" label="使用物料" parent="" state="valid"/>
+	<field name="" value="40" label="生成物料" parent="" state="valid"/>
+</category>

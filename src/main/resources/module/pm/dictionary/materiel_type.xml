@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="WLLX" label="物料类型"  description="物料类型">
+	<field name="" value="10" label="采购件" parent="" state="valid"/>
+	<field name="" value="20" label="自制件" parent="" state="valid"/>
+	<field name="" value="30" label="虚拟件" parent="" state="valid"/>
+</category>
+

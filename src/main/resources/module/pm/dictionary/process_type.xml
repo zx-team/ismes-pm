@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="gxlx" label="工序类型"  description="工序类型">
+	<field name="" value="10" label="加工" parent="" state="valid"/>
+</category>

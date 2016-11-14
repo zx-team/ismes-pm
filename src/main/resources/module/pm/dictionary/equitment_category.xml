@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="SBFL" label="设备分类代码"  description="设备分类代码">
+	<field name="" value="0" label=" " parent="" state="valid"/>
+	<field name="" value="10" label="车床" parent="" state="valid"/>
+	<field name="" value="20" label="铣床" parent="" state="valid"/>
+	<field name="" value="30" label="磨床" parent="" state="valid"/>
+	<field name="" value="40" label="钻床" parent="" state="valid"/>
+</category>
+

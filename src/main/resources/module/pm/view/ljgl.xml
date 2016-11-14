@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="ljgl" title="零件管理" onReady="viewReady">
+	<hidden name="gyzdwj_name" bind="gyzdwj.wjmc"></hidden>
+	<normal-actions>
+		<button name="insertNew" label="添加"  type="button" icon="icon-Add_to" onClick="insert_but_func"/>
+		<button name="queryBtn" label="查询"  type="button" icon="icon-query" onClick="query_but_func"/>
+	</normal-actions>
+	<table name="table-gyjm-ljlb" showrownum="false" scroll="false" minheight="430" 
+		editurl="" multiselect="false" url = "table" layoutconstraint="md:12" showpager="true" >
+		<column label="零件项号" name="ljxh"  type="text" editable="false" />
+		<column label="零件图号" name="ljbh"  hidden="false"/>
+		<column label="零件id" name="ljid" key="true" hidden="true"/>
+		<column label="零件名称" name="ljmc"  hidden="false"/>
+		<column label="毛坯规格" name="clbh"  type="text" editable="false" />		
+		<column label="零件简码" name="mpdh"  type="text" editable="false" />
+		<column label="加工状态" name="jgzt"  type="dict" dictionary="ljjgzt" editable="false" />
+		<column label="图纸版本" name="tzbb"  type="text" editable="false" />
+		<column label="装箱数量" name="zxsl"  type="text" editable="false" />		
+		<column label="操作" name="table_action"  type="operation" editable="false">
+			<attribute name="formatoptions"><![CDATA[
+				[
+					{
+						name:"talbe_lj_edit",
+						icon:"icon-edit",
+						label:"编辑",
+						click:handle_table_lj_edit
+					},
+					{
+						name:"talbe_lj_scgc",
+						icon:"icon-Legend",
+						label:"生产过程管理",
+						click:handle_table_lj_scgcgl
+					},
+					{
+						name:"talbe_lj_delete",
+						icon:"icon-delete",
+						label:"删除",
+						click:handle_table_lj_delete
+					}
+				]
+			]]></attribute>
+		</column>
+	</table>
+	
+	<modal name="ljAddEditModal" heading="零件编辑" sizing="large" show="false" keyboard="true">
+		<modal-body>
+			<form name="form-modal"  horizontal="true" action="/ljgl/saveLjxx" method="post" >
+				<form-body>
+					<hidden name = "ljid_modal"></hidden>
+					<form-group>
+						<label for="ljbh_modal" text="零件图号" layoutconstraint="md:2"/>
+						<text name="ljbh_modal" placeholder="请输入零件图号"
+							readonly="false" layoutconstraint="md:4;"  validate="{required:true,maxlength:50}"/>
+						
+						<label for="ljxh_modal" text="零件项号" layoutconstraint="md:2"/>
+						<text name="ljxh_modal" placeholder="请输入零件项号"
+							readonly="false" layoutconstraint="md:4;"  validate="{required:true,maxlength:24}"/>
+					</form-group>
+					
+					<form-group>
+						<label for="ljmc_modal" text="零件名称" layoutconstraint="md:2"/>
+						<text name="ljmc_modal" placeholder="请输入零件名称"
+							readonly="false" layoutconstraint="md:4;"  validate="{required:true,maxlength:50}"/>
+							
+						<label for="mpdh_modal" text="零件简码" layoutconstraint="md:2"/>
+						<text name="mpdh_modal" placeholder="请输入零件简码"  validate="{required:true,maxlength:30}"
+							layoutconstraint="md:4;" />
+					</form-group>
+					
+					<form-group>
+						<label for="ljlb_modal" text="零件类别" layoutconstraint="md:2"/>
+						<select name="ljlb_modal" placeholder="请选择零件类别" dictionary="ljlb"
+							layoutconstraint="md:4;"/>
+							
+						<label for="clbh_modal_str" text="毛坯规格" layoutconstraint="md:2"/>
+						<!-- <text name="clbh_modal" placeholder="请输入毛坯规格"
+							readonly="false" layoutconstraint="md:4;" validate="{maxlength:20}"/> -->
+						<hidden name="clbh_modal"></hidden>
+						<select name="clbh_modal_str" multiple="false" layoutconstraint="md:2" 
+							 placeholder="请输入毛坯规格" url="mp_query_search" 
+							 search = "true" onChange="mpgg_change_func" validate="{required:true}"/>
+					</form-group>
+					<form-group>
+						<label for="dw_modal" text="零件单位" layoutconstraint="md:2"/>
+						<select name="dw_modal" placeholder="请选择零件单位" dictionary="ljdw"
+							layoutconstraint="md:4;" />
+							
+						<label for="clyd_modal" text="材料硬度" layoutconstraint="md:2"/>
+						<text name="clyd_modal" placeholder="请输入材料硬度"
+							readonly="false" layoutconstraint="md:2;" />
+						<select name="clyddw_modal" placeholder="请选择硬度单位" dictionary="CLYD"
+							layoutconstraint="md:2;" />
+					</form-group>
+					
+					<form-group>
+						<label for="zxsl_modal" text="装箱数量" layoutconstraint="md:2"/>
+						<number name="zxsl_modal" placeholder="请输入装箱数量" layoutconstraint="md:4;"
+							readonly="false" format="###,###" validate="{required:true,min:0}"/>
+					</form-group>
+					
+					<form-group>
+						<label for="cpzl_modal" text="成品重量(kg)" layoutconstraint="md:2"/>
+						<number name="cpzl_modal" placeholder="请输入成品重量" layoutconstraint="md:4;"
+							readonly="false" format="###,###.000" validate="{required:true,min:0}"  />
+						
+						<label for="dezl_modal" text="定额重量(kg)" layoutconstraint="md:2"/>
+						<number name="dezl_modal" placeholder="请输入定额重量" layoutconstraint="md:4;"
+							readonly="false" format="###,###.000" validate="{required:true,min:0}" />
+					</form-group>
+					
+					<form-group>
+						<label for="cpcd_modal" text="成品长度(mm)" layoutconstraint="md:2"/>
+						<number name="cpcd_modal" placeholder="请输入成品长度" layoutconstraint="md:4;"
+							readonly="false" format="###,###" value="0" validate="{required:true,min:0}" />
+							
+						<label for="jgzt_modal" text="加工状态" layoutconstraint="md:2"/>
+						<select name="jgzt_modal" placeholder="请选择加工状态" dictionary="ljjgzt"
+							layoutconstraint="md:4;" disabled="true"/>
+							
+						<hidden name="jgzt_hidden" />
+					</form-group>
+					
+					<form-group>
+						<label for="ljtpid_modal" text="零件图片" layoutconstraint="md:2" />
+						<file name="ljtpid_modal" placeholder="请上传图片" accept =".jpg,.png"
+							 layoutconstraint="md:4;md-offset:0;" onChange="file_change_func"/>
+						
+						<label name="" for="tzbb_modal" text="图纸版本" layoutconstraint="md:2"/>
+						<text name="tzbb_modal" placeholder="请输入图纸版本"
+							readonly="false" layoutconstraint="md:4;" />
+					</form-group>
+					
+					<form-group>
+						<image shape="thumbnail" name="image_lj" popshow="true" src="" layoutconstraint="md:6;md-offset:3"  />
+					</form-group>
+					
+					<form-group>
+						<label for="ljms_modal" text="零件描述" layoutconstraint="md:2"/>
+						<textarea name="ljms_modal" placeholder="请输入零件描述" 
+							layoutconstraint="md:10;" validate="{maxlength:500}"/>
+					</form-group>
+				</form-body>
+			</form>
+		</modal-body>
+		<modal-footer>
+			<button name="save" label="保存" type="button" context="primary" onClick ="query_save_func"
+							layoutconstraint="md:2;md-offset:4"/>
+			<button name="closeModalBtn" label="关闭" type="button" context="primary"
+							layoutconstraint="md:2;md-offset:2" onClick="close_insert_modal"/>
+		</modal-footer>
+	</modal>
+	
+	<modal name="queryModal" heading="零件查询" sizing="small" show="false" keyboard="true"  onShown="resetQueryWindow">
+		<modal-body>
+			<form name="form-modal"  horizontal="true">
+				<form-body>
+					<form-group>
+						<label for="ljbh_query" text="零件图号" layoutconstraint="md:5"/>
+						<text name="ljbh_query" placeholder="请输入零件图号"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="ljmc_query" text="零件名称" layoutconstraint="md:5"/>
+						<text name="ljmc_query" placeholder="请输入零件名称"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="ljlb_query" text="零件类别" layoutconstraint="md:5"/>
+						<select name="ljlb_query" placeholder="请选择零件类别" dictionary="ljlb"
+							layoutconstraint="md:7;" />
+					</form-group>
+					<form-group>
+						<label for="cl_query" text="毛坯规格" layoutconstraint="md:5"/>
+						<text name="cl_query" placeholder="请输入毛坯规格"
+							readonly="false" layoutconstraint="md:7;" />
+					</form-group>
+				</form-body>
+			</form>
+		</modal-body>
+		<modal-footer>
+			<button name="query" label="查询" type="button" context="primary" onClick ="query_lj_func"
+							layoutconstraint="md:5;sm:2;md-offset:1"/>
+			<button name="closeQueryModalBtn" label="关闭" type="button" context="primary"
+							layoutconstraint="md:5;sm:2;md-offset:1" onClick="close_query_modal"/>
+		</modal-footer>
+	</modal>
+	
+	<attribute name="javascript">
+	<![CDATA[
+	
+		 function resetQueryWindow() {
+	    	 $('#form-modal')[1].reset();
+	    	 ui.select('ljlb_query').val('');
+	    }
+	    
+		function viewReady() {
+			var gyzdwj_name = ui.hidden("gyzdwj_name").val();
+			
+			$('.close').click(function(){
+				closeAddWindow();
+			});	
+			$("#ljbh_modal").blur(function(){
+				var ljbh = $("#ljbh_modal").val();
+		  		$.ajax({
+		             type: "POST",
+		             url:   ui.getRealUrl("getLjbh"),
+		             async: false,
+		             data: {ljbh : ljbh },
+		             success: function(data){
+		             	if(data.data.length > 0){
+		             		ui.warn('该零件图号已存在,请重新输入');
+		             		$("#ljbh_modal").val('');
+		             	} else {
+		             		
+		             	}
+		             }
+		         });
+			});	
+			
+			$("#ljxh_modal").blur(function(){
+				var ljxh = $("#ljxh_modal").val();
+				var ljid = $("#ljid_modal").val();
+		  		$.ajax({
+		             type: "POST",
+		             url:   ui.getRealUrl("getLjhx"),
+		             async: false,
+		             data: {ljid : ljid, ljxh:ljxh},
+		             success: function(data){
+		             	if(data.data.length > 0){
+		             		ui.warn('该零件项号已存在,请重新输入');
+		             		$("#ljxh_modal").val('');
+		             	}
+		             }
+		         });
+			});
+		}
+		
+		function closeAddWindow(){
+	    	$('#form-modal')[0].reset();
+	    	$('#form-modal').validate().resetForm();
+		}
+		
+		function insert_but_func(){
+			
+			$('#form-modal')[0].reset();
+			ui.select("clyddw_modal").val("10"); 
+			ui.select("ljlb_modal").val("10"); 
+			//ui.select("jgzt_modal").val("10"); 
+			
+			ui.select("clbh_modal_str").val("");
+			ui.text("clbh_modal").val("");
+			
+			var imgId = document.getElementById("image_lj");
+			imgId.style.visibility = "hidden";
+			ui.image("image_lj").attr("src","");	
+		
+			var h = document.getElementById("myModalLabel");
+			h.innerHTML = "零件新增";
+			ui.modal("ljAddEditModal").show();
+		}
+		
+		function handle_table_lj_edit(name,rowid){
+			$.ajax({
+		             type: "POST",
+		             url:  ui.getRealUrl("query_ljxxByid"),
+		             async: false,
+		             data: {ljid :  rowid},
+		             success: function(data){
+		             	ui.hidden("ljid_modal").val(data.ljid);
+						ui.text("ljbh_modal").val(data.ljbh);
+						ui.text("ljxh_modal").val(data.ljxh);
+						ui.text("ljmc_modal").val(data.ljmc);
+						ui.select("ljlb_modal").val(data.ljlbdm);
+						ui.text("clbh_modal").val(data.clbh);
+						ui.select("dw_modal").val(data.dw);
+						ui.text("clyd_modal").val(data.clyd);
+						ui.select("clyddw_modal").val(data.clyddw);
+						ui.text("mpdh_modal").val(data.mpdh);
+						ui.textarea("ljms_modal").val(data.ljms);	
+						
+						ui.number("zxsl_modal").val(data.zxsl);
+						ui.number("cpzl_modal").val(data.cpzl);
+						ui.number("dezl_modal").val(data.dezl);
+						ui.number("cpcd_modal").val(data.cpcd);
+						ui.select("jgzt_modal").val(data.jgzt);
+						ui.hidden("jgzt_hidden").val(data.jgzt);
+						ui.text("tzbb_modal").val(data.tzbb);
+						ui.select("clbh_modal_str").val(data.wlid);
+						ui.text("clbh_modal").val(data.clbh);
+						
+						var imgId = document.getElementById("image_lj");
+						if(data.url){
+							imgId.style.visibility = "visible";
+							ui.image("image_lj").attr("src",data.url);				
+						}else{
+							imgId.style.visibility = "hidden";
+							ui.image("image_lj").attr("src","");	
+						}
+					
+						var h = document.getElementById("myModalLabel");
+						h.innerHTML = "零件编辑";
+						ui.modal("ljAddEditModal").show();
+		             }
+		         });
+		}
+		
+		function handle_table_lj_delete(name,rowid){
+			ui.confirm("您确定要删除该条记录吗？",function(res){
+				if(res){
+					$.ajax({
+			             type: "POST",
+			             url:   ui.getRealUrl("delete_ljxxByid"),
+			             async: false,
+			             data: {ljid : rowid },
+			             success: function(data){
+			             	ui.table("table-gyjm-ljlb").removeRow(rowid);
+			             }
+			         });
+				}
+			});
+		}
+		// 生产过程管理
+		function handle_table_lj_scgcgl(name,rowid){
+			var url =  ui.getRealUrl("/scgc/index") + "?ljid=" + rowid;
+			window.location.href= url;
+		}
+		
+		function query_save_func(){
+			ui.form("form-modal").ajaxSubmit(function(){	
+				//ui.success("准备Ajax提交 ...");		
+			},function(data){
+				ui.success("保存成功");
+				ui.modal("ljAddEditModal").hide();
+				ui.table("table-gyjm-ljlb").reload();
+				
+			},function(){
+				ui.error("保存失败！");
+				ui.modal("ljAddEditModal").hide();
+				ui.table("table-gyjm-ljlb").reload();
+			});
+		}
+		
+		function close_insert_modal(){
+			$('#form-modal')[0].reset();
+			closeAddWindow();
+			var imgId = document.getElementById("image_lj");
+			imgId.style.visibility = "hidden";
+			ui.image("image_lj").attr("src","");	
+			ui.modal("ljAddEditModal").hide();
+		}
+		
+		function file_change_func(){
+			//alert();
+		}
+		
+		function query_but_func(){
+			ui.text("ljbh_query").val("");
+			ui.text("ljmc_query").val("");
+			ui.select("ljlb_query").val("");
+			ui.text("cl_query").val("");
+			
+			ui.modal("queryModal").show();
+		}
+		
+		function query_lj_func(){
+			var ljbh = ui.text("ljbh_query").val();
+			var ljmc = ui.text("ljmc_query").val();
+			var ljlb = ui.select("ljlb_query").val();
+			var clbh = ui.text("cl_query").val();
+			ui.table("table-gyjm-ljlb").search(
+				{ljbh:ljbh,ljmc:ljmc,ljlb:ljlb,clbh:clbh}
+			);
+			
+			ui.modal("queryModal").hide();
+		}
+		
+		function close_query_modal() {
+	    	ui.modal("queryModal").hide();
+	    }
+	    
+	    function mpgg_change_func(){
+	    	//毛坯规格
+	    	var wlid = ui.select('clbh_modal_str').val();
+	    	var mpgg = ui.select('clbh_modal_str').text()[0];
+	    	
+	    	ui.hidden("clbh_modal").val(mpgg); 
+        	$.ajax({
+	             type: "POST",
+	             url:  ui.getRealUrl("mp_select"),
+	             async: false,
+	             data: {wlid :  wlid},
+	             success: function(data){
+					if(data){
+						var jgztdm = data.jgztdm;
+						ui.select('jgzt_modal').val(jgztdm);
+						ui.hidden('jgzt_hidden').val(jgztdm);
+					}
+	             }
+		    });
+	    }
+	    
+	]]>
+	</attribute>
+</view>

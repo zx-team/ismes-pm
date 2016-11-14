@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="ljdw" label="零件单位"  description="零件单位">
+	<field name="" value="10" label="个" parent="" state="valid"/>
+	<field name="" value="20" label="件" parent="" state="valid"/>
+</category>

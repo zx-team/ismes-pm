@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="gxlb" title="工序列表" onReady="viewReady">
+
+	<hidden name="ljtp_url" bind="partsInfo.url"></hidden>
+	
+	<panel layoutconstraint="md:12;">
+		<panel-body>
+			<bunch layoutconstraint="md:2">
+				<image shape="thumbnail" name="image_lj" popshow="true" src="" layoutconstraint="md:4"  />
+			</bunch>
+		
+			<bunch layoutconstraint="md:10">
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljmc" text="零件名称 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljmc" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_ljbh" text="零件图号 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.ljbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_mpdh" text="零件简码 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.mpdh" align = "center" layoutconstraint="md:12"  />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_tzbb" text="图纸版本 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.tzbb" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="毛坯规格 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.clbh" align = "center" layoutconstraint="md:12" />
+				</bunch>
+				<bunch layoutconstraint="md:2">
+					<plaintext name="chn_jgzt" text="加工状态 " align = "center" type="strong" layoutconstraint="md:12" />
+					<plaintext bind="partsInfo.jgzt_str" align = "center" layoutconstraint="md:12" />
+				</bunch>
+			</bunch>
+			
+		</panel-body>
+	</panel>
+
+	<normal-actions>
+		<button name="gyjm-lb" label="图形编辑器" type="button" icon="icon-switch" onClick="gyjm_txbjq_func"/>
+		<button name="gyjm-fb" label="发布"  type="button" icon="icon-Release" onClick="gyjm_fb_func"/>
+	</normal-actions>
+	<hidden name = "ljid" bind ="ljid"></hidden>
+	<hidden name = "gyid" bind ="gyid"></hidden>
+	<hidden name = "jgzt_str_val" bind ="partsInfo.jgzt_str"></hidden>
+	<!-- <column label="加工状态Str" name="jgzt_str" hidden="true" bind="partsInfo.jgzt_str" /> -->
+	<table name="table-gyjm-gxlb" showrownum="true" scroll="false" minheight="430"
+		editurl="" multiselect="false" url = "gxTable?gyid=${gyid}" layoutconstraint="md:12"
+		showpager="false" caption="工序列表" pagesize="200">
+		<column label="工序id" name="gxid" key="true" hidden="true"/>
+		<column label="工序名称" name="gxmc"  hidden="false"/>
+		<column label="设备类型" name="sblxmc"  hidden="false"/>
+		<!-- <column label="程序名称" name="cxmc"  type="text"  editable="false"/> -->
+		<column label="刀体" name="djmc"  type="text" editable="false" />
+		<column label="刀片" name="dpmc"  type="text" editable="false" />
+		<column label="量具" name="ljmc"  type="text" editable="false" />
+		<column label="夹具" name="jjmc"  type="text" editable="false" />
+		<column label="生成物料编号" name="scwlbh" type="text"  editable="false"/>
+		<column label="使用物料编号" name="sywlbh"  type="text" editable="false" />
+		<column label="操作" name="action"  type="operation">
+		<attribute name="formatoptions"><![CDATA[
+			[
+				{
+					name:"gyjm_edit",
+					icon:"icon-edit",
+					label:"编辑",
+					click:handle_table_gyjm
+				}
+			]
+		]]></attribute>
+		</column>
+	</table>
+	
+	<attribute name="javascript">
+	<![CDATA[
+		function viewReady(){
+		
+			var ljtp_url = ui.hidden("ljtp_url").val();
+			ui.image("image_lj").attr("src",ljtp_url);
+		}
+		
+		function handle_table_gyjm(name,rowid){
+			var gyid =  ui.hidden("gyid").val();
+			var jgzt_str_val =  ui.hidden("jgzt_str_val").val();
+			var url = ui.getRealUrl("/gx/addGxIndex") + "?gyid=" + gyid + "&gxid=" + rowid+"&jgzt="+jgzt_str_val;
+			window.location.href= url;
+		}
+		
+		function gyjm_txbjq_func(){
+			var ljid =  ui.hidden("ljid").val();
+			var gyid =  ui.hidden("gyid").val();
+			var url =  ui.getRealUrl("/gy/gyjmIndex") + "?gyid=" + gyid + "&ljid=" + ljid;
+			window.location.href= url;
+		}
+		
+		function gyjm_fb_func(){
+			$.ajax({
+		             type: "POST",
+		             url:  ui.getRealUrl("/gy/gyfb"),
+		             async: false,
+		             data: {gyid :  ui.hidden("gyid").val()},
+		             success: function(data){
+		             	if(data == 'OK'){
+		             		ui.success("发布成功");
+		             	}else{
+			             	ui.error(data);
+		             	}
+		             }
+		         });
+		}
+	]]>
+	</attribute>
+</view>

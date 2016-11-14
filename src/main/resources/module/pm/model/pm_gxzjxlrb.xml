@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 工序质检项录入表 -->
+<model version="1.0.2" name="pm_gxzjxlrb">
+	<fields>
+		<gxzjxlrid type="pk" pk="true" comment="工序质检项录入id" label="工序质检项录入id"></gxzjxlrid>
+		<zjxh type="string"  required="true" maxlength="50"   comment="质检序号" label="质检序号"/>
+		<ljid type="pk" comment="零件ID" label="零件ID"/>
+		<gxzid type="pk" comment="工序组ID" label="工序组ID"/>
+		<zjbzlx type="string" required="false" maxlength="50"  comment="质检标准类型" label="质检标准类型"/>
+		<jyxm type="dict" comment="检验项目" label="检验项目"/>
+		<gyyq type="string" required="false" maxlength="200"  comment="工艺要求" label="工艺要求"/>
+		<yxsx type="decimal" required="false" length="8" precision="3"  comment="允许上限" label="允许上限"/>
+		<yxxx type="decimal" required="false" length="8" precision="3"  comment="允许下限" label="允许下限"/>
+		<!-- 20161028 add by maww 增加是否检四个字段 -->
+		<swjsfj type="string" required="false" length="5" comment="首末检" label="首尾件是否检"/>
+		<xjsfj type="string" required="false" length="5" comment="巡检" label="巡检"/>	
+		<hxsfj type="string" required="false" length="5" comment="换线" label="换线"/>
+		<zjsfj type="string" required="false" length="5" comment="自检" label="自检"/>
+		<zjysfj type="string" required="false" length="5" comment="质检员" label="质检员"/>
+		<zjjsfj type="string" required="false" length="5" comment="中间件是否检" label="中间件是否检"/><!--去掉  -->
+	</fields>
+</model>

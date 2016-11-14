@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="pm" version="1.0.0" category="system">
+	<information>
+		<name>System User Management</name>
+		<vendor>
+			<name>Isesol isMES</name>
+			<url>http://www.isesol.com/</url>
+		</vendor>
+		<description>User is a module which adds user functionality to system.</description>
+		<license>AGPL</license>
+	</information>
+	<activities>
+		<activity name="gx" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.activity.GxActivity"/>
+		<activity name="service" dialect="java" class="com.isesol.mes.ismes.pm.service.ProductManagementService"/>
+		<activity name="cxgl" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.activity.CxglActivity"/>
+		<activity name="gy" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.activity.GyjmActivity"/>
+		<activity name="ljgl" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.activity.LjglActivity"/>
+		<activity name="nc" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.service.DownloadFile"/>
+		<activity name="gxservice" dialect="java" class="com.isesol.mes.ismes.pm.service.GxService"/>
+		<activity name="scgc" dialect="java" roles="PRODUCTION_ROLE" class="com.isesol.mes.ismes.pm.activity.ScgcActivity"/>
+	</activities>
+	<roles>
+		<role name="PRODUCTION_ROLE" label="产品管理" description="零件管理、工艺管理、程序管理" />
+	</roles>
+	<menus>
+		<!-- 工厂建模（一级） -->
+		<category name="factory_modeling" label="工厂建模" icon="#00cc92;Factory_modeling"  weight="2"/>
+		<!-- 产品建模（二级） -->
+		<category name="product_manager" label="产品管理" icon="button " category = "factory_modeling" weight="40"/>
+			<menu name="part_manage" label="零件管理" activity="ljgl" activity-method="index" category="product_manager" 
+				roles="PRODUCTION_ROLE" description="零件管理" icon="button" weight="100"/>
+			<menu name="craftwork_manage" label="工艺管理" activity="gy" activity-method="partsIndex" category="product_manager" 
+				roles="PRODUCTION_ROLE" description="工艺管理" icon="button" weight="200"/>
+			<menu name="program_manager_list" label="程序管理" activity="cxgl" activity-method="query_cxgl" category="product_manager" 
+				roles="PRODUCTION_ROLE" description="程序管理" icon="button" weight="300"/>
+	</menus>
+	<services>
+		<service name = "pmservice_ljxx" activity = "service" activity-method = "query_ljxx"/>
+		<service name = "pmservice_query_ljxxFile" activity = "service" activity-method = "query_ljxxFile"/>
+		<service name = "pmservice_gbxx" activity = "service" activity-method = "query_gbxx"/>
+		<service name = "pmservice_cxxx" activity = "service" activity-method = "query_cxxx"/>
+		<service name = "pmservice_cxgl" activity = "service" activity-method = "query_cxgl"/>
+		<service name = "pmservice_cxxxbysbgx" activity = "service" activity-method = "query_cxglbysbgx"/>
+		<service name = "partsInfoService" activity = "service" activity-method = "queryPartsInfoByCode"/>
+		<service name = "query_gxxx_by_ljid_service" activity = "service" activity-method = "query_gxxx_by_ljid"/>
+		<service name = "pmservice_ljxxbybhmc" activity = "service" activity-method = "query_ljxxbybhmc"/>
+		<service name = "pmservice_ljxxbybhxh" activity = "service" activity-method = "query_ljxxbybhxh"/>
+		<service name = "pmservice_gxxx_by_nlzid" activity = "service" activity-method = "query_gxxx_by_nlzid"/>
+		<service name = "pmservice_wllist_by_gxid" activity = "service" activity-method = "wlListByGxid"/>
+		<service name = "pmservice_insertFile" activity = "service" activity-method = "insertFile"/>
+		<service name = "pmservice_nlzids_by_gxid" activity = "service" activity-method = "query_nlzids_by_gxid"/>
+		<service name = "fileInfoService" activity = "service" activity-method = "query_fileInfo"></service>
+		<service name = "queryGxxxByGxid" activity = "service" activity-method = "query_gxxx"></service>
+		<service name = "queryGxzxxByGxid" activity = "service" activity-method = "query_gxzxx"></service>
+		<service name = "queryGxzxxByGxid_new" activity = "service" activity-method = "query_gxzxx_new"></service>
+		<service name = "queryGxzxxByGxid_new1" activity = "service" activity-method = "query_gxzxx_new1"></service>
+		<service name = "queryWlidByGxid" activity = "service" activity-method = "query_wlxx"></service>
+		<service name = "queryLjxxByLjbh" activity = "service" activity-method = "query_ljxx_by_ljbh"></service>
+		<service name = "queryLjxxByLjxh" activity = "service" activity-method = "query_ljxx_by_ljxh"></service>
+		<service name = "pmservice_query_gygx" activity = "service" activity-method = "query_gygx"></service>
+		<service name = "pmservice_query_gxxxFile" activity = "gxservice" activity-method = "query_gxxxFile"/>
+		<service name = "pmservice_query_gxzxxFile" activity = "gxservice" activity-method = "query_gxzxxFile"/>
+		<service name = "pmservice_table_zjxx" activity = "gxservice" activity-method = "table_zjxx"/>
+		<service name = "pmservice_query_gxxx" activity = "service" activity-method = "query_gxxx_by_param"/>
+		<service name = "pmservice_querygxxxbygxzid" activity = "service" activity-method = "queryGxxxByGxzid"/>
+		<service name = "pmservice_query_gxz" activity = "service" activity-method = "query_gxz_by_param"/>
+		<service name = "pmservice_query_gxz_byid" activity = "service" activity-method = "query_gxz_byid"/>	
+		<service name = "pmservice_query_gxz_by_jgdyid" activity = "service" activity-method = "query_gxz_by_jgdyid"/>		
+		<service name = "pmservice_query_gxzList_by_ljid_jgzt" activity = "service" activity-method = "query_gxzList_by_ljid_jgzt"/>		
+		<service name = "pmservice_query_time_by_gxzid_jgdyid" activity = "service" activity-method = "query_time_by_gxzid_jgdyid"/>
+		<service name = "queryLjxxByparam" activity = "service" activity-method = "query_ljxx_by_param"/>
+		<service name = "queryCxxxByparam" activity = "service" activity-method = "query_cxxxb_by_param"/>
+		<service name = "pmservice_query_ljglb" activity = "service" activity-method = "query_ljglb"/>
+		<service name = "pmservice_query_zjxbycon" activity = "service" activity-method = "query_zjxbycon"/>
+		<service name = "pmservice_searchZjbzlx" activity = "service" activity-method = "searchZjbzlx"/>
+		<service name = "pmservice_query_ljxxByljbh" activity = "service" activity-method = "query_ljxxByljbh"/>
+	</services>
+	
+	<resources>
+		<resource name="circle" fileName="circle.jpg" shared="true" type="image" uri="/module/pm/resource/images/node/circle.jpg"/>
+	</resources>
+</module>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 文件管理表 -->
+<model version="1.0.0" name="pm_file_info">
+	<fields>
+		<wjid type="pk" pk="true" comment="文件ID" label="文件ID"/>
+		<wjmc type="string" required="true" maxlength="50" comment="文件名称" label="文件名称"/>
+		<wjlj type="string" required="true" maxlength="200" comment="文件路径" label="文件路径"/>
+		<wjdx type="string" required="true" maxlength="20" comment="文件大小" label="文件大小"/>
+		<wjlb type="string" required="true" maxlength="100" comment="文件类别" label="文件类别"/>
+	</fields>
+</model>
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<category name="ljjgzt" label="零件加工状态"  description="零件加工状态">
+	<field name="" value="10" label="-0" parent="" state="valid"/>
+	<field name="" value="20" label="-2" parent="" state="valid"/>
+</category>
+

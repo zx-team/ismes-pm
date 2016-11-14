@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 程序管理表 -->
+<model version="1.0.0" name="pm_cxgl">
+	<fields>
+		<cxid type="pk" required="true" pk="true" comment="程序ID" label="程序ID"/>
+		<cxmc type="string" required="false" maxlength="50" comment="程序名称（自定义）" label="程序名称（自定义）"/>
+		<cxmczd type="string" required="false" maxlength="50" comment="程序名称（系统自动生产）" label="程序名称（系统自动生产）"/>
+		<cxdbb type="integer" required="false" comment="程序大版本" label="程序大版本"/>
+		<cxxbb type="integer" required="false" comment="程序小版本" label="程序小版本"/>
+		<cxlx type="dict" required="false" comment="程序类型" label="程序类型"/>
+		<cxlb type="dict" required="false" comment="程序类别" label="程序类别"/>
+		<yggh type="user" required="false" comment="员工工号" label="员工工号"/>
+		<sbid type="pk" required="false" comment="设备ID" label="设备ID"/>
+		<sbzbb type="integer" required="false" comment="设备上传子版本" label="设备上传子版本"/>
+		<yxbz type="dict" required="false" comment="程序有效标识" label="程序有效标识"/>
+		<ljid type="pk" required="false" comment="零件ID" label="零件ID"/>
+		<gxid type="pk" required="false" comment="工序ID" label="工序ID"/>
+		<scsj type="timestamp" required="false" maxlength="25" comment="上传时间" label="上传时间"/>
+		<zxbz type="string" required="false" maxlength="200" comment="最新标识" label="最新标识"/>
+		<cxwjid type="pk" required="false" comment="程序文件ID" label="程序文件ID"/>
+	</fields>
+</model>
+
